@@ -18,7 +18,7 @@ export function Portfolio() {
           </div>
           
           <h2 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight mb-8">
-            <span className="block mb-2">MVP Showcase</span>
+            <span className="block mb-2">Creative Productions</span>
           </h2>
           
           <p className="text-2xl lg:text-3xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">

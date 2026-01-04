@@ -23,7 +23,7 @@ export function Footer() {
           <div className="col-span-12 md:col-span-4">
             <div>
               <div className="font-bagel text-background text-3xl tracking-wider mb-4">
-                Faith Invictus Studio
+                MOJJU
               </div>
               <p className="text-background/70 leading-relaxed mb-6">
                 Revolutionizing video production with intelligent AI that understands 
@@ -118,7 +118,7 @@ export function Footer() {
         <div className="border-t border-background/20 pt-8 mt-16">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-sm text-background/70 mb-4 md:mb-0">
-              © 2025 Faith Invictus Studio. All rights reserved.
+              © 2025 MOJJU. All rights reserved.
             </div>
             <div className="text-sm text-background/70">
               2847 HIGHLAND AVE. SUITE 310 BIRMINGHAM 35205, AL, USA

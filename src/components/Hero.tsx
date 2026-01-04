@@ -134,7 +134,7 @@ export function Hero() {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
               }}
             >
-              <span className="font-bagel text-white text-xl tracking-wider">Faith Invictus Studio</span>
+              <span className="font-bagel text-white text-xl tracking-wider">MOJJU</span>
             </motion.div>
 
             {/* Navigation Menu */}
@@ -315,9 +315,9 @@ export function Hero() {
       >
         <div className="max-w-2xl">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black leading-tight text-white">
-            <span className="block">INNOVATE.</span>
-            <span className="block">SOLVE.</span>
-            <span className="block">IMPACT.</span>
+            <span className="block">AI FILM</span>
+            <span className="block">PRODUCTION</span>
+            <span className="block">WITHOUT LIMITS</span>
           </h1>
         </div>
       </motion.div>
