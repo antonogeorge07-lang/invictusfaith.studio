@@ -9,36 +9,42 @@ const mvps = [
     description: 'Real-time AI translation for global gamers. Break language barriers instantly.',
     icon: Globe,
     status: 'Live',
+    url: '', // Add your URL here
   },
   {
     name: 'MentorVerse',
     description: 'Coaching and mentoring platform for English learning and personal growth.',
     icon: Users,
     status: 'Beta',
+    url: '', // Add your URL here
   },
   {
     name: 'SAAI',
     description: 'AI-driven automation insights platform. Optimize your workflows with intelligence.',
     icon: Brain,
     status: 'In Development',
+    url: '', // Add your URL here
   },
   {
     name: 'Faith Commerce',
     description: 'Digital product marketplace designed for creators and conscious consumers.',
     icon: ShoppingBag,
     status: 'Coming Soon',
+    url: '', // Add your URL here
   },
   {
     name: 'Invictus Network',
     description: 'Ecosystem for innovators and founders. Connect, collaborate, and conquer.',
     icon: Network,
     status: 'Live',
+    url: '', // Add your URL here
   },
   {
     name: 'More Coming',
     description: 'We\'re always building. Have an idea? Let\'s make it real together.',
     icon: Sparkles,
     status: 'Your Idea?',
+    url: '#contact',
   },
 ]
 
@@ -111,31 +117,44 @@ export function MVPShowcase() {
           viewport={{ once: true, margin: "-100px" }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {mvps.map((mvp) => (
-            <motion.div
-              key={mvp.name}
-              variants={itemVariants}
-              className="group glass-card rounded-3xl p-8 transition-all duration-300 card-glow hover:scale-[1.02] cursor-pointer"
-            >
-              {/* Status Badge */}
-              <div className="flex items-center justify-between mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-                  <mvp.icon className="w-7 h-7 text-accent" />
-                </div>
-                <span className="text-xs font-semibold text-accent uppercase tracking-wider px-3 py-1 rounded-full bg-accent/10">
-                  {mvp.status}
-                </span>
-              </div>
+          {mvps.map((mvp) => {
+            const CardWrapper = mvp.url ? 'a' : 'div'
+            const linkProps = mvp.url ? {
+              href: mvp.url,
+              target: mvp.url.startsWith('http') ? '_blank' : undefined,
+              rel: mvp.url.startsWith('http') ? 'noopener noreferrer' : undefined,
+            } : {}
 
-              {/* Content */}
-              <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-accent transition-colors">
-                {mvp.name}
-              </h3>
-              <p className="text-muted-foreground leading-relaxed">
-                {mvp.description}
-              </p>
-            </motion.div>
-          ))}
+            return (
+              <motion.div
+                key={mvp.name}
+                variants={itemVariants}
+              >
+                <CardWrapper
+                  {...linkProps}
+                  className="block group glass-card rounded-3xl p-8 transition-all duration-300 card-glow hover:scale-[1.02] cursor-pointer h-full"
+                >
+                  {/* Status Badge */}
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                      <mvp.icon className="w-7 h-7 text-accent" />
+                    </div>
+                    <span className="text-xs font-semibold text-accent uppercase tracking-wider px-3 py-1 rounded-full bg-accent/10">
+                      {mvp.status}
+                    </span>
+                  </div>
+
+                  {/* Content */}
+                  <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-accent transition-colors">
+                    {mvp.name}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {mvp.description}
+                  </p>
+                </CardWrapper>
+              </motion.div>
+            )
+          })}
         </motion.div>
       </div>
     </section>
