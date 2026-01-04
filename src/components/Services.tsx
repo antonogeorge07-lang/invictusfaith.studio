@@ -101,7 +101,7 @@ export function Services() {
           <h2 className={`text-5xl sm:text-6xl lg:text-7xl font-black leading-tight mb-6 text-amber-100 transform transition-all duration-1000 delay-200 ${
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
           }`}>
-            What We Develop
+            Pillars
           </h2>
           
           <p className={`text-xl text-amber-200/90 leading-relaxed max-w-3xl mx-auto transform transition-all duration-1000 delay-400 ${
@@ -318,7 +318,7 @@ export function Services() {
                     
                     {/* Developer stamp */}
                     <div className="absolute bottom-2 right-2 text-xs text-gray-400 font-mono opacity-60">
-                      MOJJU LAB
+                      FI STUDIO
                     </div>
                   </div>
                 </div>
@@ -521,7 +521,7 @@ export function Services() {
                     <div className="absolute bottom-8 left-3 w-2 h-8 bg-yellow-100/20 rounded-full transform rotate-15" />
                     
                     <div className="absolute bottom-2 right-2 text-xs text-gray-400 font-mono opacity-60">
-                      MOJJU LAB
+                      FI STUDIO
                     </div>
                   </div>
                 </div>
