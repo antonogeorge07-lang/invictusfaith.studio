@@ -89,6 +89,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.successDesc': "We'll get back to you soon.",
     'contact.error': 'Error',
     'contact.errorDesc': 'Failed to send message. Please try again.',
+    'contact.rateLimitError': 'Too many submissions',
+    'contact.rateLimitDesc': 'Please wait before submitting again.',
   },
   
   es: {
@@ -155,6 +157,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.successDesc': 'Te responderemos pronto.',
     'contact.error': 'Error',
     'contact.errorDesc': 'Error al enviar. Intenta de nuevo.',
+    'contact.rateLimitError': 'Demasiados envíos',
+    'contact.rateLimitDesc': 'Por favor espera antes de enviar de nuevo.',
   },
   
   ru: {
@@ -221,6 +225,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.successDesc': 'Мы скоро ответим.',
     'contact.error': 'Ошибка',
     'contact.errorDesc': 'Не удалось отправить. Попробуйте снова.',
+    'contact.rateLimitError': 'Слишком много отправок',
+    'contact.rateLimitDesc': 'Пожалуйста, подождите перед повторной отправкой.',
   },
   
   hu: {
@@ -287,6 +293,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.successDesc': 'Hamarosan válaszolunk.',
     'contact.error': 'Hiba',
     'contact.errorDesc': 'Sikertelen küldés. Próbáld újra.',
+    'contact.rateLimitError': 'Túl sok beküldés',
+    'contact.rateLimitDesc': 'Kérjük, várj az újraküldés előtt.',
   },
   
   pt: {
@@ -353,6 +361,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.successDesc': 'Responderemos em breve.',
     'contact.error': 'Erro',
     'contact.errorDesc': 'Falha ao enviar. Tente novamente.',
+    'contact.rateLimitError': 'Muitos envios',
+    'contact.rateLimitDesc': 'Por favor, aguarde antes de enviar novamente.',
   },
   
   fr: {
@@ -419,6 +429,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.successDesc': 'Nous répondrons bientôt.',
     'contact.error': 'Erreur',
     'contact.errorDesc': 'Échec envoi. Réessayez.',
+    'contact.rateLimitError': 'Trop de soumissions',
+    'contact.rateLimitDesc': 'Veuillez patienter avant de renvoyer.',
   },
   
   de: {
@@ -485,6 +497,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.successDesc': 'Wir melden uns bald.',
     'contact.error': 'Fehler',
     'contact.errorDesc': 'Senden fehlgeschlagen. Versuchen Sie es erneut.',
+    'contact.rateLimitError': 'Zu viele Einreichungen',
+    'contact.rateLimitDesc': 'Bitte warten Sie, bevor Sie erneut einreichen.',
   },
   
   it: {
@@ -551,6 +565,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.successDesc': 'Risponderemo presto.',
     'contact.error': 'Errore',
     'contact.errorDesc': 'Invio fallito. Riprova.',
+    'contact.rateLimitError': 'Troppi invii',
+    'contact.rateLimitDesc': 'Attendi prima di inviare di nuovo.',
   },
   
   pl: {
@@ -617,6 +633,8 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.successDesc': 'Odpowiemy wkrótce.',
     'contact.error': 'Błąd',
     'contact.errorDesc': 'Wysyłanie nieudane. Spróbuj ponownie.',
+    'contact.rateLimitError': 'Zbyt wiele zgłoszeń',
+    'contact.rateLimitDesc': 'Proszę poczekać przed ponownym wysłaniem.',
   },
   
   nl: {
@@ -683,5 +701,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.successDesc': 'We reageren snel.',
     'contact.error': 'Fout',
     'contact.errorDesc': 'Verzenden mislukt. Probeer opnieuw.',
+    'contact.rateLimitError': 'Te veel inzendingen',
+    'contact.rateLimitDesc': 'Wacht even voordat u opnieuw verzendt.',
   },
 };
