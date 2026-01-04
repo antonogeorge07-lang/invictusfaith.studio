@@ -1,185 +1,153 @@
 'use client'
 
-import { motion, useInView } from 'framer-motion'
-import { useRef, useState } from 'react'
-import { Send, CheckCircle } from 'lucide-react'
+import { useEffect } from 'react'
 
 export function Contact() {
-  const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  })
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Simulate form submission
-    setIsSubmitted(true)
-    setTimeout(() => {
-      setIsSubmitted(false)
-      setFormData({ name: '', email: '', message: '' })
-    }, 3000)
-  }
+  useEffect(() => {
+    // Load Cal.com embed script
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.innerHTML = `
+      (function (C, A, L) { 
+        let p = function (a, ar) { a.q.push(ar); }; 
+        let d = C.document; 
+        C.Cal = C.Cal || function () { 
+          let cal = C.Cal; 
+          let ar = arguments; 
+          if (!cal.loaded) { 
+            cal.ns = {}; 
+            cal.q = cal.q || []; 
+            d.head.appendChild(d.createElement("script")).src = A; 
+            cal.loaded = true; 
+          } 
+          if (ar[0] === L) { 
+            const api = function () { p(api, arguments); }; 
+            const namespace = ar[1]; 
+            api.q = api.q || []; 
+            if(typeof namespace === "string"){
+              cal.ns[namespace] = cal.ns[namespace] || api;
+              p(cal.ns[namespace], ar);
+              p(cal, ["initNamespace", namespace]);
+            } else p(cal, ar); 
+            return;
+          } 
+          p(cal, ar); 
+        }; 
+      })(window, "https://app.cal.com/embed/embed.js", "init");
+      
+      Cal("init", "mojju-discovery-call", {origin:"https://app.cal.com"});
+      
+      Cal.ns["mojju-discovery-call"]("inline", {
+        elementOrSelector:"#my-cal-inline-mojju-discovery-call",
+        config: {"layout":"month_view"},
+        calLink: "mojli/30min",
+      });
+      
+      Cal.ns["mojju-discovery-call"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
+    `
+    
+    document.body.appendChild(script)
+    
+    return () => {
+      // Cleanup script on unmount
+      if (document.body.contains(script)) {
+        document.body.removeChild(script)
+      }
+    }
+  }, [])
 
   return (
-    <section 
-      id="contact" 
-      ref={ref}
-      className="relative py-32 overflow-hidden"
-      style={{
-        background: 'linear-gradient(135deg, hsl(210 47% 10%) 0%, hsl(220 50% 12%) 50%, hsl(210 47% 10%) 100%)',
-      }}
-    >
-      {/* Background Gradient */}
-      <div 
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at 50% 100%, hsl(140 49% 55% / 0.08) 0%, transparent 60%)',
-        }}
-      />
+    <section id="contact" className="relative py-32 bg-card/30">
+      <div className="container mx-auto px-6 sm:px-8 lg:px-12">
+        {/* Section Header */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-3 mb-6">
+            <div className="w-3 h-3 bg-accent-emerald rounded-full animate-pulse" />
+            <span className="text-sm font-semibold text-muted-foreground">
+              Let's Create Together
+            </span>
+            <div className="w-3 h-3 bg-accent-blue rounded-full animate-pulse" />
+          </div>
+          
+          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight mb-8">
+            <span className="block mb-2">Ready to Light Up the Screen?</span>
+            
+          </h2>
+          
+          <p className="text-2xl lg:text-3xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+            Book a discovery call to discuss your project and see how we can bring your vision to cinematic reality
+          </p>
+        </div>
 
-      {/* Floating Orbs */}
-      <motion.div
-        className="absolute w-80 h-80 rounded-full opacity-10"
-        style={{
-          background: 'radial-gradient(circle, hsl(194 56% 51% / 0.5) 0%, transparent 70%)',
-          top: '10%',
-          right: '5%',
-          filter: 'blur(60px)',
-        }}
-        animate={{ y: [0, -30, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-2 mb-6">
-              <span className="w-8 h-[2px] bg-primary" />
-              <span className="text-sm font-medium text-primary tracking-wide uppercase">
-                Get In Touch
-              </span>
-              <span className="w-8 h-[2px] bg-primary" />
-            </div>
-
-            <h2 className="font-display font-bold text-foreground mb-6">
-              Let's build something the world{' '}
-              <span className="text-primary">remembers</span>
-            </h2>
-
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Ready to turn your vision into reality? We're here to listen, collaborate, and create.
-            </p>
-          </motion.div>
-
-          {/* Form */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <form 
-              onSubmit={handleSubmit}
-              className="glass-card rounded-3xl p-8 md:p-12"
-            >
-              {isSubmitted ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center justify-center py-12 text-center"
-                >
-                  <CheckCircle className="w-16 h-16 text-primary mb-6" />
-                  <h3 className="font-display font-semibold text-2xl text-foreground mb-3">
-                    Message Sent!
+        {/* Cal.com Booking Widget */}
+        <div className="max-w-5xl mx-auto">
+          <div className="bg-background clean-border rounded-3xl overflow-hidden elevated-shadow">
+            {/* Widget Header */}
+            <div className="bg-card/50 px-8 py-6 border-b border-border">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-black text-foreground mb-1">
+                    MOJJU Discovery Call
                   </h3>
                   <p className="text-muted-foreground">
-                    We'll get back to you as soon as possible.
+                    30 minutes • Video call • Free consultation
                   </p>
-                </motion.div>
-              ) : (
-                <div className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    {/* Name */}
-                    <div>
-                      <label 
-                        htmlFor="name" 
-                        className="block text-sm font-medium text-foreground mb-2"
-                      >
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        required
-                        className="w-full px-4 py-3 rounded-xl bg-background/50 border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                        placeholder="Your name"
-                      />
-                    </div>
-
-                    {/* Email */}
-                    <div>
-                      <label 
-                        htmlFor="email" 
-                        className="block text-sm font-medium text-foreground mb-2"
-                      >
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        required
-                        className="w-full px-4 py-3 rounded-xl bg-background/50 border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                        placeholder="your@email.com"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Message */}
-                  <div>
-                    <label 
-                      htmlFor="message" 
-                      className="block text-sm font-medium text-foreground mb-2"
-                    >
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      required
-                      rows={5}
-                      className="w-full px-4 py-3 rounded-xl bg-background/50 border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none"
-                      placeholder="Tell us about your project..."
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    type="submit"
-                    className="w-full md:w-auto px-8 py-4 rounded-xl bg-primary text-primary-foreground font-display font-semibold flex items-center justify-center gap-3 hover:bg-primary/90 transition-colors shadow-lg shadow-primary/25"
-                  >
-                    <span>Send Message</span>
-                    <Send className="w-5 h-5" />
-                  </motion.button>
                 </div>
-              )}
-            </form>
-          </motion.div>
+                <div className="hidden sm:flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-accent-emerald rounded-full" />
+                  <span className="text-sm text-muted-foreground font-medium">Available now</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Cal.com Embed Container */}
+            <div className="p-0 bg-white">
+              <div 
+                style={{
+                  width: '100%',
+                  height: '600px',
+                  overflow: 'scroll'
+                }} 
+                id="my-cal-inline-mojju-discovery-call"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Info */}
+        <div className="text-center mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="bg-background clean-border rounded-2xl p-6 subtle-shadow">
+              <div className="w-12 h-12 bg-accent-blue/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-6 h-6 bg-accent-blue rounded-full" />
+              </div>
+              <h4 className="font-black text-foreground mb-2">Project Discussion</h4>
+              <p className="text-muted-foreground text-sm">
+                Share your vision and requirements with our team
+              </p>
+            </div>
+            
+            <div className="bg-background clean-border rounded-2xl p-6 subtle-shadow">
+              <div className="w-12 h-12 bg-accent-emerald/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-6 h-6 bg-accent-emerald rounded-full" />
+              </div>
+              <h4 className="font-black text-foreground mb-2">Custom Strategy</h4>
+              <p className="text-muted-foreground text-sm">
+                Get a tailored approach for your unique project
+              </p>
+            </div>
+            
+            <div className="bg-background clean-border rounded-2xl p-6 subtle-shadow">
+              <div className="w-12 h-12 bg-accent-purple/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-6 h-6 bg-accent-purple rounded-full" />
+              </div>
+              <h4 className="font-black text-foreground mb-2">Next Steps</h4>
+              <p className="text-muted-foreground text-sm">
+                Clear timeline and roadmap to bring your idea to life
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
