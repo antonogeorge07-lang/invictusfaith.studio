@@ -1,8 +1,11 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 export function Vision() {
+  const { t } = useLanguage()
+
   return (
     <section className="relative py-32 bg-secondary/30 overflow-hidden">
       {/* Floating orb decoration */}
@@ -33,7 +36,7 @@ export function Vision() {
             className="flex items-center gap-3 mb-8"
           >
             <div className="w-12 h-px bg-accent" />
-            <span className="text-sm font-semibold text-accent uppercase tracking-wider">Our Belief</span>
+            <span className="text-sm font-semibold text-accent uppercase tracking-wider">{t('vision.label')}</span>
           </motion.div>
 
           {/* Main quote */}
@@ -44,9 +47,9 @@ export function Vision() {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-8"
           >
-            Innovation grounded in{' '}
-            <span className="text-accent">faith</span>
-            {' '}in purpose, people, and perseverance creates solutions that last.
+            {t('vision.headline')}{' '}
+            <span className="text-accent">{t('vision.faith')}</span>
+            {' '}{t('vision.headlineEnd')}
           </motion.h2>
 
           {/* Supporting text */}
@@ -57,7 +60,7 @@ export function Vision() {
             transition={{ delay: 0.2 }}
             className="text-lg text-muted-foreground leading-relaxed"
           >
-            We believe technology should serve humanity, not the other way around. Every product we build is designed to create meaningful impact and empower people to achieve their fullest potential.
+            {t('vision.description')}
           </motion.p>
         </div>
       </div>

@@ -3,18 +3,21 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-
-const navLinks = [
-  { href: '#hero', label: 'Home' },
-  { href: '#vision', label: 'About' },
-  { href: '#mvps', label: 'MVPs' },
-  { href: '#pillars', label: 'Pillars' },
-  { href: '#contact', label: 'Contact' },
-]
+import { LanguageSwitcher } from './LanguageSwitcher'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { t } = useLanguage()
+
+  const navLinks = [
+    { href: '#hero', label: t('nav.home') },
+    { href: '#vision', label: t('nav.about') },
+    { href: '#mvps', label: t('nav.mvps') },
+    { href: '#pillars', label: t('nav.pillars') },
+    { href: '#contact', label: t('nav.contact') },
+  ]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,11 +69,12 @@ export function Navbar() {
                 {link.label}
               </a>
             ))}
+            <LanguageSwitcher />
             <button
               onClick={() => scrollToSection('#contact')}
               className="btn-electric px-6 py-2.5 rounded-2xl text-sm font-semibold"
             >
-              Start a Project
+              {t('nav.startProject')}
             </button>
           </div>
 
@@ -104,11 +108,14 @@ export function Navbar() {
                   {link.label}
                 </a>
               ))}
+              <div className="mt-4">
+                <LanguageSwitcher />
+              </div>
               <button
                 onClick={() => scrollToSection('#contact')}
                 className="btn-electric px-8 py-4 rounded-2xl text-lg font-semibold mt-4 w-fit"
               >
-                Start a Project
+                {t('nav.startProject')}
               </button>
             </div>
           </motion.div>

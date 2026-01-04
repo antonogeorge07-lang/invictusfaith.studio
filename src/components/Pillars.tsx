@@ -2,28 +2,8 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
-import { Lightbulb, Wrench, Rocket } from 'lucide-react'
-
-const pillars = [
-  {
-    title: 'Innovate',
-    description: 'We challenge the status quo. Every project starts with a bold question: What if we could do this better?',
-    icon: Lightbulb,
-    color: 'from-accent/20 to-accent/5',
-  },
-  {
-    title: 'Solve',
-    description: 'Ideas are nothing without execution. We build solutions that work, iterate until perfect, and deliver results.',
-    icon: Wrench,
-    color: 'from-primary/10 to-primary/5',
-  },
-  {
-    title: 'Impact',
-    description: 'Technology should make lives better. We measure success by the positive change we create in the world.',
-    icon: Rocket,
-    color: 'from-accent/20 to-accent/5',
-  },
-]
+import { Lightbulb, Users, Rocket } from 'lucide-react'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 export function Pillars() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -31,8 +11,30 @@ export function Pillars() {
     target: containerRef,
     offset: ['start end', 'end start'],
   })
+  const { t } = useLanguage()
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100])
+
+  const pillars = [
+    {
+      titleKey: 'pillars.purpose.title',
+      descKey: 'pillars.purpose.desc',
+      icon: Lightbulb,
+      color: 'from-accent/20 to-accent/5',
+    },
+    {
+      titleKey: 'pillars.people.title',
+      descKey: 'pillars.people.desc',
+      icon: Users,
+      color: 'from-primary/10 to-primary/5',
+    },
+    {
+      titleKey: 'pillars.perseverance.title',
+      descKey: 'pillars.perseverance.desc',
+      icon: Rocket,
+      color: 'from-accent/20 to-accent/5',
+    },
+  ]
 
   return (
     <section ref={containerRef} className="relative py-32 bg-primary text-primary-foreground overflow-hidden">
@@ -55,7 +57,7 @@ export function Pillars() {
             className="inline-flex items-center gap-3 mb-6"
           >
             <div className="w-12 h-px bg-accent" />
-            <span className="text-sm font-semibold text-accent uppercase tracking-wider">Our Foundation</span>
+            <span className="text-sm font-semibold text-accent uppercase tracking-wider">{t('pillars.label')}</span>
             <div className="w-12 h-px bg-accent" />
           </motion.div>
 
@@ -66,7 +68,7 @@ export function Pillars() {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6"
           >
-            Three Pillars of Excellence
+            {t('pillars.title')} <span className="text-accent">{t('pillars.titleAccent')}</span>
           </motion.h2>
         </div>
 
@@ -74,7 +76,7 @@ export function Pillars() {
         <div className="grid md:grid-cols-3 gap-8">
           {pillars.map((pillar, index) => (
             <motion.div
-              key={pillar.title}
+              key={pillar.titleKey}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -91,10 +93,10 @@ export function Pillars() {
 
                 {/* Content */}
                 <h3 className="text-3xl font-bold text-primary-foreground mb-4">
-                  {pillar.title}
+                  {t(pillar.titleKey)}
                 </h3>
                 <p className="text-primary-foreground/70 leading-relaxed text-lg">
-                  {pillar.description}
+                  {t(pillar.descKey)}
                 </p>
               </div>
             </motion.div>

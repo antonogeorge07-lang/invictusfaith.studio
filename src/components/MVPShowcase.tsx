@@ -2,51 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Globe, Users, Brain, ShoppingBag, Network, Sparkles } from 'lucide-react'
-
-const mvps = [
-  {
-    name: 'POLY-LINQ',
-    description: 'Real-time AI translation for global gamers. Break language barriers instantly.',
-    icon: Globe,
-    status: 'Live',
-    url: '', // Add your URL here
-  },
-  {
-    name: 'MentorVerse',
-    description: 'Coaching and mentoring platform for English learning and personal growth.',
-    icon: Users,
-    status: 'Beta',
-    url: '', // Add your URL here
-  },
-  {
-    name: 'SAAI',
-    description: 'AI-driven automation insights platform. Optimize your workflows with intelligence.',
-    icon: Brain,
-    status: 'In Development',
-    url: '', // Add your URL here
-  },
-  {
-    name: 'Faith Commerce',
-    description: 'Digital product marketplace designed for creators and conscious consumers.',
-    icon: ShoppingBag,
-    status: 'Coming Soon',
-    url: '', // Add your URL here
-  },
-  {
-    name: 'Invictus Network',
-    description: 'Ecosystem for innovators and founders. Connect, collaborate, and conquer.',
-    icon: Network,
-    status: 'Live',
-    url: '', // Add your URL here
-  },
-  {
-    name: 'More Coming',
-    description: 'We\'re always building. Have an idea? Let\'s make it real together.',
-    icon: Sparkles,
-    status: 'Your Idea?',
-    url: '#contact',
-  },
-]
+import { useLanguage } from '@/i18n/LanguageContext'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -72,6 +28,53 @@ const itemVariants = {
 }
 
 export function MVPShowcase() {
+  const { t } = useLanguage()
+
+  const mvps = [
+    {
+      nameKey: 'mvp.polylinq.name',
+      descKey: 'mvp.polylinq.desc',
+      statusKey: 'mvp.polylinq.status',
+      icon: Globe,
+      url: '',
+    },
+    {
+      nameKey: 'mvp.mentorverse.name',
+      descKey: 'mvp.mentorverse.desc',
+      statusKey: 'mvp.mentorverse.status',
+      icon: Users,
+      url: '',
+    },
+    {
+      nameKey: 'mvp.saai.name',
+      descKey: 'mvp.saai.desc',
+      statusKey: 'mvp.saai.status',
+      icon: Brain,
+      url: '',
+    },
+    {
+      nameKey: 'mvp.faithcommerce.name',
+      descKey: 'mvp.faithcommerce.desc',
+      statusKey: 'mvp.faithcommerce.status',
+      icon: ShoppingBag,
+      url: '',
+    },
+    {
+      nameKey: 'mvp.invictusnetwork.name',
+      descKey: 'mvp.invictusnetwork.desc',
+      statusKey: 'mvp.invictusnetwork.status',
+      icon: Network,
+      url: '',
+    },
+    {
+      nameKey: 'mvp.more.name',
+      descKey: 'mvp.more.desc',
+      statusKey: 'mvp.more.status',
+      icon: Sparkles,
+      url: '#contact',
+    },
+  ]
+
   return (
     <section className="relative py-32 bg-background overflow-hidden">
       <div className="container mx-auto px-6">
@@ -84,7 +87,7 @@ export function MVPShowcase() {
             className="inline-flex items-center gap-3 mb-6"
           >
             <div className="w-12 h-px bg-accent" />
-            <span className="text-sm font-semibold text-accent uppercase tracking-wider">Our Products</span>
+            <span className="text-sm font-semibold text-accent uppercase tracking-wider">{t('mvp.label')}</span>
             <div className="w-12 h-px bg-accent" />
           </motion.div>
 
@@ -95,7 +98,7 @@ export function MVPShowcase() {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-5xl font-bold text-foreground mb-6"
           >
-            MVPs Built for Impact
+            {t('mvp.title')}
           </motion.h2>
 
           <motion.p
@@ -105,7 +108,7 @@ export function MVPShowcase() {
             transition={{ delay: 0.2 }}
             className="text-lg text-muted-foreground max-w-2xl mx-auto"
           >
-            From concept to launch, we build minimum viable products that solve real problems and create real value.
+            {t('mvp.description')}
           </motion.p>
         </div>
 
@@ -127,7 +130,7 @@ export function MVPShowcase() {
 
             return (
               <motion.div
-                key={mvp.name}
+                key={mvp.nameKey}
                 variants={itemVariants}
               >
                 <CardWrapper
@@ -140,16 +143,16 @@ export function MVPShowcase() {
                       <mvp.icon className="w-7 h-7 text-accent" />
                     </div>
                     <span className="text-xs font-semibold text-accent uppercase tracking-wider px-3 py-1 rounded-full bg-accent/10">
-                      {mvp.status}
+                      {t(mvp.statusKey)}
                     </span>
                   </div>
 
                   {/* Content */}
                   <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-accent transition-colors">
-                    {mvp.name}
+                    {t(mvp.nameKey)}
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    {mvp.description}
+                    {t(mvp.descKey)}
                   </p>
                 </CardWrapper>
               </motion.div>
