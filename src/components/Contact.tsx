@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { supabase } from '@/integrations/supabase/client'
 import { toast } from 'sonner'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ export function Contact() {
     message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { t } = useLanguage()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -28,11 +30,11 @@ export function Contact() {
 
       if (error) throw error
 
-      toast.success('Message sent successfully!')
+      toast.success(t('contact.success'), { description: t('contact.successDesc') })
       setFormData({ name: '', email: '', message: '' })
     } catch (error) {
       console.error('Error submitting form:', error)
-      toast.error('Failed to send message. Please try again.')
+      toast.error(t('contact.error'), { description: t('contact.errorDesc') })
     } finally {
       setIsSubmitting(false)
     }
@@ -56,11 +58,11 @@ export function Contact() {
             viewport={{ once: true }}
           >
             <h2 className="text-4xl md:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
-              Let's build something the world{' '}
-              <span className="text-accent">remembers.</span>
+              {t('contact.title')}{' '}
+              <span className="text-accent">{t('contact.titleAccent')}</span>
             </h2>
             <p className="text-primary-foreground/60 text-lg font-light">
-              Ready to turn your vision into an impactful MVP? Join the Invictus Network.
+              {t('contact.description')}
             </p>
           </motion.div>
 
@@ -77,7 +79,7 @@ export function Contact() {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              placeholder="Your Name" 
+              placeholder={t('contact.name')}
               required
               className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
             />
@@ -86,7 +88,7 @@ export function Contact() {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="Email Address" 
+              placeholder={t('contact.email')}
               required
               className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
             />
@@ -94,7 +96,7 @@ export function Contact() {
               name="message"
               value={formData.message}
               onChange={handleChange}
-              placeholder="Tell us about your project..." 
+              placeholder={t('contact.messagePlaceholder')}
               rows={4}
               required
               className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors resize-none"
@@ -104,7 +106,7 @@ export function Contact() {
               disabled={isSubmitting}
               className="w-full py-4 btn-electric rounded-2xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'Sending...' : 'Send Message'}
+              {isSubmitting ? t('contact.sending') : t('contact.send')}
             </button>
           </motion.form>
         </div>
@@ -121,10 +123,10 @@ export function Contact() {
           </div>
           
           <div className="flex gap-8 text-sm text-primary-foreground/60">
-            <a href="#hero" className="hover:text-accent transition-colors">Home</a>
-            <a href="#mvps" className="hover:text-accent transition-colors">MVPs</a>
-            <a href="#pillars" className="hover:text-accent transition-colors">Insights</a>
-            <a href="#contact" className="hover:text-accent transition-colors">Contact</a>
+            <a href="#hero" className="hover:text-accent transition-colors">{t('nav.home')}</a>
+            <a href="#mvps" className="hover:text-accent transition-colors">{t('nav.mvps')}</a>
+            <a href="#pillars" className="hover:text-accent transition-colors">{t('nav.pillars')}</a>
+            <a href="#contact" className="hover:text-accent transition-colors">{t('nav.contact')}</a>
           </div>
 
           <p className="text-[10px] text-primary-foreground/30 uppercase font-mono">

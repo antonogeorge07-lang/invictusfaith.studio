@@ -2,8 +2,11 @@
 
 import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 export function Hero() {
+  const { t } = useLanguage()
+
   const scrollToNext = () => {
     const element = document.querySelector('#vision')
     if (element) {
@@ -27,7 +30,7 @@ export function Hero() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-border mb-8"
           >
             <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-            <span className="text-sm font-medium text-muted-foreground">Purpose-Driven Innovation</span>
+            <span className="text-sm font-medium text-muted-foreground">{t('hero.badge')}</span>
           </motion.div>
 
           {/* Main Headline */}
@@ -37,9 +40,9 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-foreground leading-tight mb-8"
           >
-            Innovate.{' '}
-            <span className="text-accent">Solve.</span>{' '}
-            Impact.
+            {t('hero.headline1')}{' '}
+            <span className="text-accent">{t('hero.headline2')}</span>{' '}
+            {t('hero.headline3')}
           </motion.h1>
 
           {/* Subtext */}
@@ -49,7 +52,7 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-12 font-light"
           >
-            Faith Invictus Studio builds purposeful digital products that move the world forward.
+            {t('hero.subtext')}
           </motion.p>
 
           {/* CTA Buttons */}
@@ -64,14 +67,14 @@ export function Hero() {
               onClick={(e) => { e.preventDefault(); document.querySelector('#mvps')?.scrollIntoView({ behavior: 'smooth' }); }}
               className="btn-electric px-8 py-4 rounded-2xl text-lg font-semibold"
             >
-              Explore Our MVPs
+              {t('hero.exploreMVPs')}
             </a>
             <a
               href="#contact"
               onClick={(e) => { e.preventDefault(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }}
               className="px-8 py-4 rounded-2xl text-lg font-semibold border-2 border-primary text-foreground hover:bg-primary hover:text-primary-foreground transition-all"
             >
-              Start a Collaboration
+              {t('hero.startCollab')}
             </a>
           </motion.div>
         </div>
@@ -84,7 +87,7 @@ export function Hero() {
           onClick={scrollToNext}
           className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-accent transition-colors cursor-pointer"
         >
-          <span className="text-sm font-medium">Scroll to explore</span>
+          <span className="text-sm font-medium">{t('hero.scroll')}</span>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
