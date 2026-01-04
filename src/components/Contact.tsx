@@ -32,9 +32,13 @@ export function Contact() {
 
       toast.success(t('contact.success'), { description: t('contact.successDesc') })
       setFormData({ name: '', email: '', message: '' })
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting form:', error)
-      toast.error(t('contact.error'), { description: t('contact.errorDesc') })
+      const isRateLimit = error?.message?.includes('Rate limit exceeded')
+      toast.error(
+        isRateLimit ? t('contact.rateLimitError') : t('contact.error'), 
+        { description: isRateLimit ? t('contact.rateLimitDesc') : t('contact.errorDesc') }
+      )
     } finally {
       setIsSubmitting(false)
     }
