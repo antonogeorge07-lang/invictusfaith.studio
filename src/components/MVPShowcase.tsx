@@ -36,7 +36,7 @@ export function MVPShowcase() {
       descKey: 'mvp.polylinq.desc',
       statusKey: 'mvp.polylinq.status',
       icon: Globe,
-      url: '',
+      url: 'https://poly-linq.com/',
     },
     {
       nameKey: 'mvp.mentorverse.name',
@@ -50,7 +50,7 @@ export function MVPShowcase() {
       descKey: 'mvp.saai.desc',
       statusKey: 'mvp.saai.status',
       icon: Brain,
-      url: '',
+      url: 'https://spark-agile.com/',
     },
     {
       nameKey: 'mvp.faithcommerce.name',
