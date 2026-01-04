@@ -46,7 +46,7 @@ export function Vision() {
           >
             Innovation grounded in{' '}
             <span className="text-accent">faith</span>
-            {' '}— in purpose, people, and perseverance — creates solutions that last.
+            {' '}in purpose, people, and perseverance creates solutions that last.
           </motion.h2>
 
           {/* Supporting text */}
