@@ -10,10 +10,16 @@ type LanguageContextType = {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>(() => {
+  const [language, setLanguageState] = useState<Language>('en');
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
     const saved = localStorage.getItem('language');
-    return (saved as Language) || 'en';
-  });
+    if (saved && ['en', 'es', 'ru', 'hu', 'pt', 'fr', 'de', 'it', 'pl', 'nl'].includes(saved)) {
+      setLanguageState(saved as Language);
+    }
+    setIsInitialized(true);
+  }, []);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
