@@ -1,98 +1,98 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
 
 export function Hero() {
-  const scrollToNext = () => {
-    const element = document.querySelector('#vision')
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
-
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-background overflow-hidden">
-      {/* Subtle gradient accent */}
-      <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[100px] pointer-events-none" />
-      
-      <div className="container mx-auto px-6 py-32 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-border mb-8"
-          >
-            <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-            <span className="text-sm font-medium text-muted-foreground">Purpose-Driven Innovation</span>
-          </motion.div>
-
-          {/* Main Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-foreground leading-tight mb-8"
-          >
-            Innovate.{' '}
-            <span className="text-accent">Solve.</span>{' '}
-            Impact.
-          </motion.h1>
-
-          {/* Subtext */}
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-12 font-light"
-          >
-            Faith Invictus Studio builds purposeful digital products that move the world forward.
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
-          >
-            <a
-              href="#mvps"
-              onClick={(e) => { e.preventDefault(); document.querySelector('#mvps')?.scrollIntoView({ behavior: 'smooth' }); }}
-              className="btn-electric px-8 py-4 rounded-2xl text-lg font-semibold"
+    <section className="relative min-h-screen flex items-center bg-background overflow-hidden pt-20">
+      <div className="container mx-auto px-6 py-20">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Side: Text Content */}
+          <div className="max-w-xl">
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-[1.1] mb-6"
             >
-              Explore Our MVPs
-            </a>
-            <a
-              href="#contact"
-              onClick={(e) => { e.preventDefault(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }}
-              className="px-8 py-4 rounded-2xl text-lg font-semibold border-2 border-primary text-foreground hover:bg-primary hover:text-primary-foreground transition-all"
+              Innovate. Solve.
+              <br />
+              Impact.
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-lg text-muted-foreground mb-10 leading-relaxed"
             >
-              Start a Collaboration
-            </a>
+              Faith Invictus Studio builds purposeful digital products that move the world forward.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="flex flex-wrap gap-4"
+            >
+              <a
+                href="#mvps"
+                onClick={(e) => { e.preventDefault(); document.querySelector('#mvps')?.scrollIntoView({ behavior: 'smooth' }); }}
+                className="px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors"
+              >
+                Explore Our MVPs
+              </a>
+              <a
+                href="#contact"
+                onClick={(e) => { e.preventDefault(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }}
+                className="px-8 py-4 rounded-full border-2 border-primary text-foreground font-semibold hover:bg-primary hover:text-primary-foreground transition-all"
+              >
+                Start a Collaboration
+              </a>
+            </motion.div>
+          </div>
+
+          {/* Right Side: Floating Orb */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="relative flex items-center justify-center"
+          >
+            <div className="relative w-80 h-80 lg:w-[400px] lg:h-[400px]">
+              {/* Outer glow */}
+              <div className="absolute inset-0 bg-accent/20 rounded-full blur-[80px] animate-pulse" />
+              
+              {/* Main sphere */}
+              <div className="absolute inset-8 bg-gradient-to-br from-primary via-[#1a1a1a] to-primary rounded-full shadow-2xl float-gentle">
+                {/* Green highlight arc */}
+                <div className="absolute top-4 right-4 w-3/4 h-3/4 border-t-4 border-r-4 border-accent/60 rounded-full" />
+                {/* Inner glow */}
+                <div className="absolute inset-12 bg-gradient-to-br from-accent/20 to-transparent rounded-full" />
+              </div>
+              
+              {/* Floating small orbs */}
+              <motion.div 
+                animate={{ y: [-10, 10, -10], x: [-5, 5, -5] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -top-4 right-12 w-16 h-16 bg-gradient-to-br from-accent/40 to-accent/10 rounded-full blur-sm"
+              />
+              <motion.div 
+                animate={{ y: [10, -10, 10], x: [5, -5, 5] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute bottom-8 -left-4 w-12 h-12 bg-gradient-to-br from-accent/30 to-transparent rounded-full blur-sm"
+              />
+              
+              {/* Dot decorations */}
+              <div className="absolute top-0 left-1/4 w-2 h-2 bg-accent rounded-full" />
+              <div className="absolute bottom-12 right-0 w-3 h-3 bg-accent/60 rounded-full" />
+            </div>
           </motion.div>
         </div>
-
-        {/* Scroll Indicator */}
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.6 }}
-          onClick={scrollToNext}
-          className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-accent transition-colors cursor-pointer"
-        >
-          <span className="text-sm font-medium">Scroll to explore</span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
-            <ChevronDown size={24} />
-          </motion.div>
-        </motion.button>
       </div>
+      
+      {/* Bottom divider line */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-border" />
     </section>
   )
 }
