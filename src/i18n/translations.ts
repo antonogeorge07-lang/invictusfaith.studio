@@ -91,6 +91,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.errorDesc': 'Failed to send message. Please try again.',
     'contact.rateLimitError': 'Too many submissions',
     'contact.rateLimitDesc': 'Please wait before submitting again.',
+    'contact.validationError': 'Invalid input',
   },
   
   es: {
@@ -159,6 +160,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.errorDesc': 'Error al enviar. Intenta de nuevo.',
     'contact.rateLimitError': 'Demasiados envíos',
     'contact.rateLimitDesc': 'Por favor espera antes de enviar de nuevo.',
+    'contact.validationError': 'Entrada inválida',
   },
   
   ru: {
@@ -227,6 +229,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.errorDesc': 'Не удалось отправить. Попробуйте снова.',
     'contact.rateLimitError': 'Слишком много отправок',
     'contact.rateLimitDesc': 'Пожалуйста, подождите перед повторной отправкой.',
+    'contact.validationError': 'Неверный ввод',
   },
   
   hu: {
@@ -295,6 +298,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.errorDesc': 'Sikertelen küldés. Próbáld újra.',
     'contact.rateLimitError': 'Túl sok beküldés',
     'contact.rateLimitDesc': 'Kérjük, várj az újraküldés előtt.',
+    'contact.validationError': 'Érvénytelen bemenet',
   },
   
   pt: {
@@ -363,6 +367,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.errorDesc': 'Falha ao enviar. Tente novamente.',
     'contact.rateLimitError': 'Muitos envios',
     'contact.rateLimitDesc': 'Por favor, aguarde antes de enviar novamente.',
+    'contact.validationError': 'Entrada inválida',
   },
   
   fr: {
@@ -431,6 +436,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.errorDesc': 'Échec envoi. Réessayez.',
     'contact.rateLimitError': 'Trop de soumissions',
     'contact.rateLimitDesc': 'Veuillez patienter avant de renvoyer.',
+    'contact.validationError': 'Entrée invalide',
   },
   
   de: {
@@ -499,6 +505,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.errorDesc': 'Senden fehlgeschlagen. Versuchen Sie es erneut.',
     'contact.rateLimitError': 'Zu viele Einreichungen',
     'contact.rateLimitDesc': 'Bitte warten Sie, bevor Sie erneut einreichen.',
+    'contact.validationError': 'Ungültige Eingabe',
   },
   
   it: {
@@ -567,6 +574,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.errorDesc': 'Invio fallito. Riprova.',
     'contact.rateLimitError': 'Troppi invii',
     'contact.rateLimitDesc': 'Attendi prima di inviare di nuovo.',
+    'contact.validationError': 'Input non valido',
   },
   
   pl: {
@@ -635,6 +643,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.errorDesc': 'Wysyłanie nieudane. Spróbuj ponownie.',
     'contact.rateLimitError': 'Zbyt wiele zgłoszeń',
     'contact.rateLimitDesc': 'Proszę poczekać przed ponownym wysłaniem.',
+    'contact.validationError': 'Nieprawidłowe dane',
   },
   
   nl: {
@@ -703,5 +712,6 @@ export const translations: Record<Language, Record<string, string>> = {
     'contact.errorDesc': 'Verzenden mislukt. Probeer opnieuw.',
     'contact.rateLimitError': 'Te veel inzendingen',
     'contact.rateLimitDesc': 'Wacht even voordat u opnieuw verzendt.',
+    'contact.validationError': 'Ongeldige invoer',
   },
 };
