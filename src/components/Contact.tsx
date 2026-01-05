@@ -5,6 +5,24 @@ import { useState } from 'react'
 import { supabase } from '@/integrations/supabase/client'
 import { toast } from 'sonner'
 import { useLanguage } from '@/i18n/LanguageContext'
+import { z } from 'zod'
+
+// Input validation schema
+const contactSchema = z.object({
+  name: z.string()
+    .trim()
+    .min(1, 'Name is required')
+    .max(100, 'Name must be less than 100 characters')
+    .regex(/^[a-zA-Z\s\u00C0-\u024F\u1E00-\u1EFF'-]+$/, 'Name contains invalid characters'),
+  email: z.string()
+    .trim()
+    .email('Invalid email address')
+    .max(255, 'Email must be less than 255 characters'),
+  message: z.string()
+    .trim()
+    .min(10, 'Message must be at least 10 characters')
+    .max(2000, 'Message must be less than 2000 characters'),
+})
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -20,12 +38,15 @@ export function Contact() {
     setIsSubmitting(true)
 
     try {
+      // Validate input before submission
+      const validatedData = contactSchema.parse(formData)
+
       const { error } = await supabase
         .from('contact_submissions')
         .insert({
-          name: formData.name.trim(),
-          email: formData.email.trim(),
-          message: formData.message.trim(),
+          name: validatedData.name,
+          email: validatedData.email,
+          message: validatedData.message,
         })
 
       if (error) throw error
@@ -33,7 +54,12 @@ export function Contact() {
       toast.success(t('contact.success'), { description: t('contact.successDesc') })
       setFormData({ name: '', email: '', message: '' })
     } catch (error: any) {
-      console.error('Error submitting form:', error)
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0]
+        toast.error(t('contact.validationError'), { description: firstError.message })
+        return
+      }
+      
       const isRateLimit = error?.message?.includes('Rate limit exceeded')
       toast.error(
         isRateLimit ? t('contact.rateLimitError') : t('contact.error'), 
