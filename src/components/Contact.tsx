@@ -51,6 +51,15 @@ export function Contact() {
 
       if (error) throw error
 
+      // Send email notification (fire and forget - don't block user)
+      supabase.functions.invoke('send-contact-notification', {
+        body: {
+          name: validatedData.name,
+          email: validatedData.email,
+          message: validatedData.message,
+        },
+      }).catch((err) => console.error('Email notification failed:', err))
+
       toast.success(t('contact.success'), { description: t('contact.successDesc') })
       setFormData({ name: '', email: '', message: '' })
     } catch (error: any) {
