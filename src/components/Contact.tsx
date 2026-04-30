@@ -7,7 +7,9 @@ import { toast } from 'sonner'
 import { useLanguage } from '@/i18n/LanguageContext'
 import { z } from 'zod'
 
-// Input validation schema
+type Category = 'feature' | 'bug' | 'idea' | 'support'
+type Priority = 'low' | 'medium' | 'high' | 'urgent'
+
 const contactSchema = z.object({
   name: z.string()
     .trim()
@@ -18,17 +20,23 @@ const contactSchema = z.object({
     .trim()
     .email('Invalid email address')
     .max(255, 'Email must be less than 255 characters'),
+  title: z.string().trim().min(3, 'Title is too short').max(150),
   message: z.string()
     .trim()
     .min(10, 'Message must be at least 10 characters')
     .max(2000, 'Message must be less than 2000 characters'),
+  category: z.enum(['feature','bug','idea','support']),
+  priority: z.enum(['low','medium','high','urgent']),
 })
 
 export function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    title: '',
     message: '',
+    category: 'support' as Category,
+    priority: 'medium' as Priority,
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { t } = useLanguage()
@@ -38,30 +46,32 @@ export function Contact() {
     setIsSubmitting(true)
 
     try {
-      // Validate input before submission
       const validatedData = contactSchema.parse(formData)
 
       const { error } = await supabase
-        .from('contact_submissions')
+        .from('requests')
         .insert({
-          name: validatedData.name,
-          email: validatedData.email,
-          message: validatedData.message,
+          submitter_name: validatedData.name,
+          submitter_email: validatedData.email,
+          title: validatedData.title,
+          description: validatedData.message,
+          category: validatedData.category,
+          priority: validatedData.priority,
         })
 
       if (error) throw error
 
-      // Send email notification (fire and forget - don't block user)
+      // Fire and forget email notification
       supabase.functions.invoke('send-contact-notification', {
         body: {
           name: validatedData.name,
           email: validatedData.email,
-          message: validatedData.message,
+          message: `[${validatedData.category.toUpperCase()} / ${validatedData.priority}] ${validatedData.title}\n\n${validatedData.message}`,
         },
       }).catch((err) => console.error('Email notification failed:', err))
 
       toast.success(t('contact.success'), { description: t('contact.successDesc') })
-      setFormData({ name: '', email: '', message: '' })
+      setFormData({ name: '', email: '', title: '', message: '', category: 'support', priority: 'medium' })
     } catch (error: any) {
       if (error instanceof z.ZodError) {
         const firstError = error.errors[0]
