@@ -126,7 +126,7 @@ Deno.serve(async (req) => {
     console.log(`Sending notification for contact from: ${safeName} (${safeEmail})`);
 
     const { data, error } = await resend.emails.send({
-      from: "Faith Invictus <onboarding@resend.dev>",
+      from: "Invictus Faith Studio <onboarding@resend.dev>",
       to: ["antono.george07@gmail.com"],
       subject: `New Contact Form Submission from ${safeName}`,
       html: `
@@ -139,7 +139,7 @@ Deno.serve(async (req) => {
             <p style="background: #0a0a0a; padding: 15px; border-radius: 4px; white-space: pre-wrap;">${safeMessage}</p>
           </div>
           <p style="color: #666; font-size: 12px; margin-top: 20px;">
-            This email was sent from the Faith Invictus Studio contact form.
+            This email was sent from the Invictus Faith Studio contact form.
           </p>
         </div>
       `,
