@@ -154,7 +154,7 @@ export function Contact() {
         <div className="border-t border-white/10 pt-12 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col items-center md:items-start">
             <span className="text-xl font-bold text-primary-foreground tracking-tight">
-              Faith Invictus Studio
+              Invictus Faith Studio
             </span>
             <p className="text-xs text-primary-foreground/40 mt-1 uppercase tracking-[0.2em]">
               Faith. Invincible. Together.
@@ -169,7 +169,7 @@ export function Contact() {
           </div>
 
           <p className="text-[10px] text-primary-foreground/30 uppercase font-mono">
-            © 2026 Faith Invictus Studio. All Rights Reserved.
+            © 2026 Invictus Faith Studio. All Rights Reserved.
           </p>
         </div>
       </div>
