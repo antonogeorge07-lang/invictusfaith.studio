@@ -97,9 +97,9 @@ Deno.serve(async (req) => {
       // Check if a recent submission exists from this email (within last 5 minutes)
       const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
       const { data: recentSubmission, error: dbError } = await supabase
-        .from("contact_submissions")
+        .from("requests")
         .select("id")
-        .eq("email", email)
+        .eq("submitter_email", email)
         .gte("created_at", fiveMinutesAgo)
         .order("created_at", { ascending: false })
         .limit(1);
