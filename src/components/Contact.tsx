@@ -7,7 +7,9 @@ import { toast } from 'sonner'
 import { useLanguage } from '@/i18n/LanguageContext'
 import { z } from 'zod'
 
-// Input validation schema
+type Category = 'feature' | 'bug' | 'idea' | 'support'
+type Priority = 'low' | 'medium' | 'high' | 'urgent'
+
 const contactSchema = z.object({
   name: z.string()
     .trim()
@@ -18,17 +20,23 @@ const contactSchema = z.object({
     .trim()
     .email('Invalid email address')
     .max(255, 'Email must be less than 255 characters'),
+  title: z.string().trim().min(3, 'Title is too short').max(150),
   message: z.string()
     .trim()
     .min(10, 'Message must be at least 10 characters')
     .max(2000, 'Message must be less than 2000 characters'),
+  category: z.enum(['feature','bug','idea','support']),
+  priority: z.enum(['low','medium','high','urgent']),
 })
 
 export function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    title: '',
     message: '',
+    category: 'support' as Category,
+    priority: 'medium' as Priority,
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { t } = useLanguage()
@@ -38,30 +46,32 @@ export function Contact() {
     setIsSubmitting(true)
 
     try {
-      // Validate input before submission
       const validatedData = contactSchema.parse(formData)
 
       const { error } = await supabase
-        .from('contact_submissions')
+        .from('requests')
         .insert({
-          name: validatedData.name,
-          email: validatedData.email,
-          message: validatedData.message,
+          submitter_name: validatedData.name,
+          submitter_email: validatedData.email,
+          title: validatedData.title,
+          description: validatedData.message,
+          category: validatedData.category,
+          priority: validatedData.priority,
         })
 
       if (error) throw error
 
-      // Send email notification (fire and forget - don't block user)
+      // Fire and forget email notification
       supabase.functions.invoke('send-contact-notification', {
         body: {
           name: validatedData.name,
           email: validatedData.email,
-          message: validatedData.message,
+          message: `[${validatedData.category.toUpperCase()} / ${validatedData.priority}] ${validatedData.title}\n\n${validatedData.message}`,
         },
       }).catch((err) => console.error('Email notification failed:', err))
 
       toast.success(t('contact.success'), { description: t('contact.successDesc') })
-      setFormData({ name: '', email: '', message: '' })
+      setFormData({ name: '', email: '', title: '', message: '', category: 'support', priority: 'medium' })
     } catch (error: any) {
       if (error instanceof z.ZodError) {
         const firstError = error.errors[0]
@@ -79,7 +89,7 @@ export function Contact() {
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
@@ -131,6 +141,40 @@ export function Contact() {
               required
               className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
             />
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="Subject / Title"
+              required
+              maxLength={150}
+              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
+            />
+            <div className="grid grid-cols-2 gap-4">
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground focus:outline-none focus:border-accent transition-colors appearance-none cursor-pointer"
+              >
+                <option value="support" className="bg-primary">Support</option>
+                <option value="feature" className="bg-primary">Feature Request</option>
+                <option value="bug" className="bg-primary">Bug Report</option>
+                <option value="idea" className="bg-primary">Idea</option>
+              </select>
+              <select
+                name="priority"
+                value={formData.priority}
+                onChange={handleChange}
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground focus:outline-none focus:border-accent transition-colors appearance-none cursor-pointer"
+              >
+                <option value="low" className="bg-primary">Low priority</option>
+                <option value="medium" className="bg-primary">Medium priority</option>
+                <option value="high" className="bg-primary">High priority</option>
+                <option value="urgent" className="bg-primary">Urgent</option>
+              </select>
+            </div>
             <textarea 
               name="message"
               value={formData.message}
