@@ -52,7 +52,7 @@ export function Navbar() {
             className="flex items-center gap-2"
           >
             <span className="text-xl font-bold text-primary tracking-tight">
-              Faith Invictus
+              Invictus Faith
             </span>
             <span className="text-accent font-light">Studio</span>
           </a>
