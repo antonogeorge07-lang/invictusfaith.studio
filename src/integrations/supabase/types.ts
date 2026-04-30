@@ -38,6 +38,143 @@ export type Database = {
         }
         Relationships: []
       }
+      request_notes: {
+        Row: {
+          author_id: string
+          body: string
+          created_at: string
+          id: string
+          request_id: string
+        }
+        Insert: {
+          author_id: string
+          body: string
+          created_at?: string
+          id?: string
+          request_id: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_notes_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_tags: {
+        Row: {
+          request_id: string
+          tag_id: string
+        }
+        Insert: {
+          request_id: string
+          tag_id: string
+        }
+        Update: {
+          request_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_tags_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "request_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      requests: {
+        Row: {
+          category: Database["public"]["Enums"]["request_category"]
+          created_at: string
+          description: string
+          effort_score: number | null
+          id: string
+          impact_score: number | null
+          position: number
+          priority: Database["public"]["Enums"]["request_priority"]
+          status: Database["public"]["Enums"]["request_status"]
+          submitter_email: string
+          submitter_name: string
+          submitter_user_id: string | null
+          title: string
+          updated_at: string
+          value_score: number | null
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["request_category"]
+          created_at?: string
+          description: string
+          effort_score?: number | null
+          id?: string
+          impact_score?: number | null
+          position?: number
+          priority?: Database["public"]["Enums"]["request_priority"]
+          status?: Database["public"]["Enums"]["request_status"]
+          submitter_email: string
+          submitter_name: string
+          submitter_user_id?: string | null
+          title: string
+          updated_at?: string
+          value_score?: number | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["request_category"]
+          created_at?: string
+          description?: string
+          effort_score?: number | null
+          id?: string
+          impact_score?: number | null
+          position?: number
+          priority?: Database["public"]["Enums"]["request_priority"]
+          status?: Database["public"]["Enums"]["request_status"]
+          submitter_email?: string
+          submitter_name?: string
+          submitter_user_id?: string | null
+          title?: string
+          updated_at?: string
+          value_score?: number | null
+        }
+        Relationships: []
+      }
+      tags: {
+        Row: {
+          color: string
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -71,9 +208,19 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_staff: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "user" | "owner" | "designer"
+      request_category: "feature" | "bug" | "idea" | "support"
+      request_priority: "low" | "medium" | "high" | "urgent"
+      request_status:
+        | "new"
+        | "reviewing"
+        | "approved"
+        | "in_progress"
+        | "completed"
+        | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -202,6 +349,16 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user", "owner", "designer"],
+      request_category: ["feature", "bug", "idea", "support"],
+      request_priority: ["low", "medium", "high", "urgent"],
+      request_status: [
+        "new",
+        "reviewing",
+        "approved",
+        "in_progress",
+        "completed",
+        "rejected",
+      ],
     },
   },
 } as const
