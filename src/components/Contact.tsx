@@ -89,7 +89,7 @@ export function Contact() {
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
@@ -141,6 +141,40 @@ export function Contact() {
               required
               className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
             />
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              placeholder="Subject / Title"
+              required
+              maxLength={150}
+              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
+            />
+            <div className="grid grid-cols-2 gap-4">
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground focus:outline-none focus:border-accent transition-colors appearance-none cursor-pointer"
+              >
+                <option value="support" className="bg-primary">Support</option>
+                <option value="feature" className="bg-primary">Feature Request</option>
+                <option value="bug" className="bg-primary">Bug Report</option>
+                <option value="idea" className="bg-primary">Idea</option>
+              </select>
+              <select
+                name="priority"
+                value={formData.priority}
+                onChange={handleChange}
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground focus:outline-none focus:border-accent transition-colors appearance-none cursor-pointer"
+              >
+                <option value="low" className="bg-primary">Low priority</option>
+                <option value="medium" className="bg-primary">Medium priority</option>
+                <option value="high" className="bg-primary">High priority</option>
+                <option value="urgent" className="bg-primary">Urgent</option>
+              </select>
+            </div>
             <textarea 
               name="message"
               value={formData.message}
