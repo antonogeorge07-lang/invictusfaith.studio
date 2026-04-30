@@ -3,7 +3,9 @@ import { Toaster } from 'sonner'
 import { LanguageProvider } from './i18n/LanguageContext'
 import Index from './pages/Index'
 import Auth from './pages/Auth'
-import Admin from './pages/Admin'
+import AdminOverview from './pages/admin/Overview'
+import AdminInbox from './pages/admin/Inbox'
+import AdminBoard from './pages/admin/Board'
 import NotFound from './pages/NotFound'
 
 export default function App() {
@@ -14,7 +16,9 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={<AdminOverview />} />
+          <Route path="/admin/inbox" element={<AdminInbox />} />
+          <Route path="/admin/board" element={<AdminBoard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
