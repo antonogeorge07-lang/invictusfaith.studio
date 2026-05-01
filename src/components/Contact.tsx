@@ -48,7 +48,7 @@ export function Contact() {
     try {
       const validatedData = contactSchema.parse(formData)
 
-      const { error } = await supabase
+      const { data: inserted, error } = await supabase
         .from('requests')
         .insert({
           submitter_name: validatedData.name,
@@ -58,17 +58,35 @@ export function Contact() {
           category: validatedData.category,
           priority: validatedData.priority,
         })
+        .select('id, public_token')
+        .single()
 
       if (error) throw error
 
-      // Fire and forget email notification
+      // Staff notification (existing)
       supabase.functions.invoke('send-contact-notification', {
         body: {
           name: validatedData.name,
           email: validatedData.email,
           message: `[${validatedData.category.toUpperCase()} / ${validatedData.priority}] ${validatedData.title}\n\n${validatedData.message}`,
         },
-      }).catch((err) => console.error('Email notification failed:', err))
+      }).catch((err) => console.error('Staff notification failed:', err))
+
+      // Customer confirmation with portal link
+      if (inserted) {
+        supabase.functions.invoke('send-transactional-email', {
+          body: {
+            templateName: 'request-received',
+            recipientEmail: validatedData.email,
+            idempotencyKey: `request-received-${inserted.id}`,
+            templateData: {
+              name: validatedData.name,
+              title: validatedData.title,
+              portalUrl: `${window.location.origin}/r/${inserted.public_token}`,
+            },
+          },
+        }).catch((err) => console.error('Customer confirmation failed:', err))
+      }
 
       toast.success(t('contact.success'), { description: t('contact.successDesc') })
       setFormData({ name: '', email: '', title: '', message: '', category: 'support', priority: 'medium' })
