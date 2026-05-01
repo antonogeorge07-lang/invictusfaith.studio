@@ -54,6 +54,8 @@ export interface RequestRow {
   position: number
   created_at: string
   updated_at: string
+  public_token: string
+  notify_on_status_change: boolean
 }
 
 export function ricePriority(impact: number | null, effort: number | null, value: number | null): number | null {
