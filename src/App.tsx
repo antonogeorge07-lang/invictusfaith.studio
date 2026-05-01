@@ -6,6 +6,8 @@ import Auth from './pages/Auth'
 import AdminOverview from './pages/admin/Overview'
 import AdminInbox from './pages/admin/Inbox'
 import AdminBoard from './pages/admin/Board'
+import RequestPortal from './pages/RequestPortal'
+import Unsubscribe from './pages/Unsubscribe'
 import NotFound from './pages/NotFound'
 
 export default function App() {
@@ -19,6 +21,8 @@ export default function App() {
           <Route path="/admin" element={<AdminOverview />} />
           <Route path="/admin/inbox" element={<AdminInbox />} />
           <Route path="/admin/board" element={<AdminBoard />} />
+          <Route path="/r/:token" element={<RequestPortal />} />
+          <Route path="/unsubscribe" element={<Unsubscribe />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
