@@ -62,6 +62,25 @@ export function Vision() {
           >
             {t('vision.description')}
           </motion.p>
+
+          {/* Maker signature */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="mt-10 flex items-center gap-3"
+          >
+            <div className="w-8 h-px bg-accent" />
+            <a
+              href="https://www.linkedin.com/in/antonogeorge"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium text-foreground hover:text-accent transition-colors"
+            >
+              Antono George, Founder
+            </a>
+          </motion.div>
         </div>
       </div>
     </section>
