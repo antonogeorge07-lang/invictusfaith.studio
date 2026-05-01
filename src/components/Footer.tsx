@@ -116,9 +116,20 @@ export function Footer() {
 
         {/* Bottom Bar - Simplified */}
         <div className="border-t border-background/20 pt-8 mt-16">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-sm text-background/70 mb-4 md:mb-0">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="text-sm text-background/70">
               © 2025 MOJJU. All rights reserved.
+            </div>
+            <div className="text-sm text-background/70">
+              Made by{' '}
+              <a
+                href="https://www.linkedin.com/in/antonogeorge"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-background hover:text-accent transition-colors"
+              >
+                Antono George, Founder
+              </a>
             </div>
             <div className="text-sm text-background/70">
               2847 HIGHLAND AVE. SUITE 310 BIRMINGHAM 35205, AL, USA
