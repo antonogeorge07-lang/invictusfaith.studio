@@ -125,6 +125,100 @@ export type Database = {
         }
         Relationships: []
       }
+      quotes: {
+        Row: {
+          accept_token: string
+          created_at: string
+          created_by: string | null
+          currency: string
+          decline_token: string
+          id: string
+          notes: string | null
+          request_id: string
+          responded_at: string | null
+          sent_at: string | null
+          status: Database["public"]["Enums"]["quote_status"]
+          title: string
+          total_cents: number
+          updated_at: string
+        }
+        Insert: {
+          accept_token?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          decline_token?: string
+          id?: string
+          notes?: string | null
+          request_id: string
+          responded_at?: string | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["quote_status"]
+          title: string
+          total_cents: number
+          updated_at?: string
+        }
+        Update: {
+          accept_token?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string
+          decline_token?: string
+          id?: string
+          notes?: string | null
+          request_id?: string
+          responded_at?: string | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["quote_status"]
+          title?: string
+          total_cents?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotes_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_messages: {
+        Row: {
+          author_id: string | null
+          author_type: string
+          body: string
+          created_at: string
+          id: string
+          request_id: string
+        }
+        Insert: {
+          author_id?: string | null
+          author_type: string
+          body: string
+          created_at?: string
+          id?: string
+          request_id: string
+        }
+        Update: {
+          author_id?: string | null
+          author_type?: string
+          body?: string
+          created_at?: string
+          id?: string
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_messages_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       request_notes: {
         Row: {
           author_id: string
@@ -195,8 +289,10 @@ export type Database = {
           effort_score: number | null
           id: string
           impact_score: number | null
+          notify_on_status_change: boolean
           position: number
           priority: Database["public"]["Enums"]["request_priority"]
+          public_token: string
           status: Database["public"]["Enums"]["request_status"]
           submitter_email: string
           submitter_name: string
@@ -212,8 +308,10 @@ export type Database = {
           effort_score?: number | null
           id?: string
           impact_score?: number | null
+          notify_on_status_change?: boolean
           position?: number
           priority?: Database["public"]["Enums"]["request_priority"]
+          public_token?: string
           status?: Database["public"]["Enums"]["request_status"]
           submitter_email: string
           submitter_name: string
@@ -229,8 +327,10 @@ export type Database = {
           effort_score?: number | null
           id?: string
           impact_score?: number | null
+          notify_on_status_change?: boolean
           position?: number
           priority?: Database["public"]["Enums"]["request_priority"]
+          public_token?: string
           status?: Database["public"]["Enums"]["request_status"]
           submitter_email?: string
           submitter_name?: string
@@ -348,6 +448,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user" | "owner" | "designer"
+      quote_status: "draft" | "sent" | "accepted" | "declined" | "expired"
       request_category: "feature" | "bug" | "idea" | "support"
       request_priority: "low" | "medium" | "high" | "urgent"
       request_status:
@@ -485,6 +586,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user", "owner", "designer"],
+      quote_status: ["draft", "sent", "accepted", "declined", "expired"],
       request_category: ["feature", "bug", "idea", "support"],
       request_priority: ["low", "medium", "high", "urgent"],
       request_status: [

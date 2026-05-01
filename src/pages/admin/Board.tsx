@@ -9,6 +9,7 @@ import {
   STATUSES, STATUS_LABEL, STATUS_COLOR, PRIORITY_COLOR, CATEGORY_LABEL,
   type RequestRow, type Status
 } from '@/lib/requestHelpers'
+import { notifyStatusChange } from '@/lib/customerComms'
 import {
   DndContext, DragOverlay, PointerSensor, useSensor, useSensors,
   type DragEndEvent, type DragStartEvent, useDroppable, useDraggable, closestCorners
@@ -124,6 +125,7 @@ export default function AdminBoard() {
       fetchAll()
     } else {
       toast.success(`Moved to ${STATUS_LABEL[newStatus]}`)
+      notifyStatusChange(req, newStatus)
     }
   }
 
