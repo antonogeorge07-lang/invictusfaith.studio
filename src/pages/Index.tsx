@@ -1,6 +1,7 @@
 import { Navbar } from '@/components/Navbar'
 import { Hero } from '@/components/Hero'
 import { Vision } from '@/components/Vision'
+import { About } from '@/components/About'
 import { MVPShowcase } from '@/components/MVPShowcase'
 import { Pillars } from '@/components/Pillars'
 import { Contact } from '@/components/Contact'
@@ -15,6 +16,9 @@ export default function Index() {
         </section>
         <section id="vision" aria-label="Vision section">
           <Vision />
+        </section>
+        <section id="about" aria-label="About section">
+          <About />
         </section>
         <section id="mvps" aria-label="MVP Showcase section">
           <MVPShowcase />
