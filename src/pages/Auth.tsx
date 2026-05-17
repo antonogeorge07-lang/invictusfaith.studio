@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
 import { toast } from 'sonner'
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react'
+import { Seo } from '@/components/Seo'
 
 export default function Auth() {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
