@@ -40,6 +40,7 @@ export default function Unsubscribe() {
 
   return (
     <div className="min-h-screen bg-primary flex items-center justify-center px-6" translate="no">
+      <Seo title="Unsubscribe | Invictus Faith Studio" description="Manage your email subscription preferences." path="/unsubscribe" noindex />
       <div className="glass-card rounded-3xl p-10 max-w-md w-full text-center border border-white/10">
         {state === 'loading' && <Loader2 className="w-6 h-6 text-accent animate-spin mx-auto" />}
         {state === 'valid' && (
