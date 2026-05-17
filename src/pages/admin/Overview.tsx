@@ -7,6 +7,7 @@ import { AdminLayout } from '@/components/admin/AdminLayout'
 import { STATUSES, PRIORITIES, STATUS_LABEL, STATUS_COLOR, PRIORITY_COLOR, type RequestRow } from '@/lib/requestHelpers'
 import { Inbox, Clock, CheckCircle2, AlertCircle, TrendingUp, Activity } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
+import { Seo } from '@/components/Seo'
 
 export default function AdminOverview() {
   const [requests, setRequests] = useState<RequestRow[]>([])
