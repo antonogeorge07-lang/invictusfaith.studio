@@ -46,6 +46,7 @@ export default function AdminOverview() {
 
   return (
     <AdminLayout title="Overview">
+      <Seo title="Admin Overview | Invictus Faith Studio" description="Overview of incoming requests and project pipeline." path="/admin" noindex />
       {loading ? (
         <div className="text-primary-foreground/60">Loading...</div>
       ) : (
