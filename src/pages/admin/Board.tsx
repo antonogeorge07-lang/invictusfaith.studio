@@ -132,6 +132,7 @@ export default function AdminBoard() {
 
   return (
     <AdminLayout title="Kanban Board">
+      <Seo title="Kanban Board | Invictus Faith Studio" description="Drag-and-drop project pipeline view." path="/admin/board" noindex />
       {loading ? (
         <div className="text-primary-foreground/60 text-center py-12">Loading...</div>
       ) : (
