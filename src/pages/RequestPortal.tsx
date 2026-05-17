@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import { formatDistanceToNow } from 'date-fns'
 import { Send, Loader2, FileText, MessageSquare } from 'lucide-react'
+import { Seo } from '@/components/Seo'
 
 const SUPABASE_URL = (import.meta as any).env.VITE_SUPABASE_URL
 const SUPABASE_KEY = (import.meta as any).env.VITE_SUPABASE_PUBLISHABLE_KEY
