@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { formatDistanceToNow } from 'date-fns'
+import { Seo } from '@/components/Seo'
 
 interface Note { id: string; body: string; author_id: string; created_at: string }
 interface Message { id: string; author_type: 'staff'|'customer'|'system'; body: string; created_at: string }
@@ -230,6 +231,7 @@ export default function AdminInbox() {
 
   return (
     <AdminLayout title="Inbox">
+      <Seo title="Admin Inbox | Invictus Faith Studio" description="Filter, triage, and respond to incoming requests." path="/admin/inbox" noindex />
       <div className="space-y-4">
         {/* Filters */}
         <div className="glass-card rounded-2xl p-4 border border-white/10">

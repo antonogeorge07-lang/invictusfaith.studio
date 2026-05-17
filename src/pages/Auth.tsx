@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
 import { toast } from 'sonner'
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react'
+import { Seo } from '@/components/Seo'
 
 export default function Auth() {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
@@ -64,6 +65,7 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen bg-primary flex items-center justify-center px-6">
+      <Seo title="Sign in | Invictus Faith Studio" description="Admin sign in for Invictus Faith Studio." path="/auth" noindex />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

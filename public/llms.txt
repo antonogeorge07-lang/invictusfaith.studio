@@ -1,0 +1,13 @@
+# Invictus Faith Studio
+
+> Purpose-driven innovation studio building AI-powered products and MVPs with real-world impact.
+
+Invictus Faith Studio is a creative tech studio led by Antono George. We design and ship intelligent, faith-aligned digital products, ranging from market dashboards and community platforms to mentoring and commerce experiences.
+
+## Pages
+
+- [Home](/): Studio overview, vision, MVP showcase, and contact.
+
+## Optional
+
+- [Contact](/#contact): Submit a project request directly from the homepage.

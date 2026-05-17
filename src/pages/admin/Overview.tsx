@@ -7,6 +7,7 @@ import { AdminLayout } from '@/components/admin/AdminLayout'
 import { STATUSES, PRIORITIES, STATUS_LABEL, STATUS_COLOR, PRIORITY_COLOR, type RequestRow } from '@/lib/requestHelpers'
 import { Inbox, Clock, CheckCircle2, AlertCircle, TrendingUp, Activity } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
+import { Seo } from '@/components/Seo'
 
 export default function AdminOverview() {
   const [requests, setRequests] = useState<RequestRow[]>([])
@@ -45,6 +46,7 @@ export default function AdminOverview() {
 
   return (
     <AdminLayout title="Overview">
+      <Seo title="Admin Overview | Invictus Faith Studio" description="Overview of incoming requests and project pipeline." path="/admin" noindex />
       {loading ? (
         <div className="text-primary-foreground/60">Loading...</div>
       ) : (

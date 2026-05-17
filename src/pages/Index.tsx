@@ -5,10 +5,16 @@ import { About } from '@/components/About'
 import { MVPShowcase } from '@/components/MVPShowcase'
 import { Pillars } from '@/components/Pillars'
 import { Contact } from '@/components/Contact'
+import { Seo } from '@/components/Seo'
 
 export default function Index() {
   return (
     <div className="min-h-screen bg-background text-foreground font-poppins">
+      <Seo
+        title="Invictus Faith Studio | Innovate. Solve. Impact."
+        description="Purpose-driven innovation studio building AI-powered products and MVPs with real-world impact."
+        path="/"
+      />
       <Navbar />
       <main className="relative">
         <section id="hero" aria-label="Hero section">

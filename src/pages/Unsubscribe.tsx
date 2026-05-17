@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
 import { Loader2 } from 'lucide-react'
+import { Seo } from '@/components/Seo'
 
 const SUPABASE_URL = (import.meta as any).env.VITE_SUPABASE_URL
 const SUPABASE_KEY = (import.meta as any).env.VITE_SUPABASE_PUBLISHABLE_KEY
@@ -39,6 +40,7 @@ export default function Unsubscribe() {
 
   return (
     <div className="min-h-screen bg-primary flex items-center justify-center px-6" translate="no">
+      <Seo title="Unsubscribe | Invictus Faith Studio" description="Manage your email subscription preferences." path="/unsubscribe" noindex />
       <div className="glass-card rounded-3xl p-10 max-w-md w-full text-center border border-white/10">
         {state === 'loading' && <Loader2 className="w-6 h-6 text-accent animate-spin mx-auto" />}
         {state === 'valid' && (
