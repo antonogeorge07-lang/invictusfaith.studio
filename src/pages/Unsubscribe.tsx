@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
 import { Loader2 } from 'lucide-react'
+import { Seo } from '@/components/Seo'
 
 const SUPABASE_URL = (import.meta as any).env.VITE_SUPABASE_URL
 const SUPABASE_KEY = (import.meta as any).env.VITE_SUPABASE_PUBLISHABLE_KEY
