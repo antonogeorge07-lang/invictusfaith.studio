@@ -231,6 +231,7 @@ export default function AdminInbox() {
 
   return (
     <AdminLayout title="Inbox">
+      <Seo title="Admin Inbox | Invictus Faith Studio" description="Filter, triage, and respond to incoming requests." path="/admin/inbox" noindex />
       <div className="space-y-4">
         {/* Filters */}
         <div className="glass-card rounded-2xl p-4 border border-white/10">
