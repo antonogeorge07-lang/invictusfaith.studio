@@ -43,7 +43,7 @@ export function MVPShowcase() {
       descKey: 'mvp.mentorverse.desc',
       statusKey: 'mvp.mentorverse.status',
       icon: Users,
-      url: '',
+      url: 'https://invictus-faith-studio.streamlit.app/',
     },
     {
       nameKey: 'mvp.saai.name',
