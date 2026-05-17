@@ -101,6 +101,7 @@ export default function RequestPortal() {
 
   return (
     <div className="min-h-screen bg-primary py-12 px-6" translate="no">
+      <Seo title={`${request.title} | Request portal`} description="Private request portal for your Invictus Faith Studio project." path={`/r/${request.public_token}`} noindex />
       <div className="max-w-3xl mx-auto space-y-8">
         <motion.header initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
           <p className="text-xs uppercase tracking-[0.2em] text-accent mb-2">Your request</p>
