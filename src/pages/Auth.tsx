@@ -64,6 +64,7 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen bg-primary flex items-center justify-center px-6">
+      <Seo title="Sign in | Invictus Faith Studio" description="Admin sign in for Invictus Faith Studio." path="/auth" noindex />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
