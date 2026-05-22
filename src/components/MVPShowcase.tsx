@@ -83,7 +83,7 @@ export function MVPShowcase() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.01 }}
             className="inline-flex items-center gap-3 mb-6"
           >
             <div className="w-12 h-px bg-accent" />
@@ -94,7 +94,7 @@ export function MVPShowcase() {
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.01 }}
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-5xl font-bold text-foreground mb-6"
           >
@@ -104,7 +104,7 @@ export function MVPShowcase() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.01 }}
             transition={{ delay: 0.2 }}
             className="text-lg text-muted-foreground max-w-2xl mx-auto"
           >
