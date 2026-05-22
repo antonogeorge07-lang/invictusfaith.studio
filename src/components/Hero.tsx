@@ -20,7 +20,7 @@ export function Hero() {
       <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[100px] pointer-events-none" />
       
-      <div className="container mx-auto px-6 py-32 relative z-10">
+      <div className="container mx-auto px-6 py-32 relative z-10 text-slate-500">
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
           <motion.div
