@@ -218,7 +218,7 @@ export function Contact() {
             <span className="text-xl font-bold text-primary-foreground tracking-tight">
               Invictus Faith Studio
             </span>
-            <p className="text-xs text-primary-foreground/40 mt-1 uppercase tracking-[0.2em]">
+            <p className="text-xs text-primary-foreground/40 mt-1 uppercase tracking-[0.2em] text-emerald-400">
               Faith. Invincible. Together.
             </p>
           </div>
@@ -230,7 +230,7 @@ export function Contact() {
             <a href="#contact" className="hover:text-accent transition-colors">{t('nav.contact')}</a>
           </div>
 
-          <p className="text-[10px] text-primary-foreground/30 uppercase font-mono">
+          <p className="text-[10px] text-primary-foreground/30 uppercase font-mono text-emerald-400">
             © 2026 Invictus Faith Studio. All Rights Reserved.
           </p>
         </div>

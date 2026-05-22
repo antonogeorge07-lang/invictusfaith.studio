@@ -51,10 +51,10 @@ export function Navbar() {
             onClick={(e) => { e.preventDefault(); scrollToSection('#hero'); }}
             className="flex items-center gap-2"
           >
-            <span className="text-xl font-bold text-primary tracking-tight">
+            <span className="text-xl font-bold text-primary tracking-tight text-emerald-400">
               Invictus Faith
             </span>
-            <span className="text-accent font-light">Studio</span>
+            <span className="text-accent font-light text-emerald-400">Studio</span>
           </a>
 
           {/* Desktop Navigation */}
@@ -64,7 +64,7 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={(e) => { e.preventDefault(); scrollToSection(link.href); }}
-                className="text-sm font-medium text-muted-foreground hover:text-accent transition-colors"
+                className="text-sm font-medium text-muted-foreground hover:text-accent transition-colors text-emerald-500"
               >
                 {link.label}
               </a>
