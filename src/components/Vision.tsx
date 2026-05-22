@@ -12,7 +12,7 @@ export function Vision() {
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
+        viewport={{ once: true, amount: 0.01 }}
         transition={{ duration: 0.8 }}
         className="absolute right-[10%] top-1/2 -translate-y-1/2 hidden lg:block"
       >
@@ -32,7 +32,7 @@ export function Vision() {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.01 }}
             className="flex items-center gap-3 mb-8"
           >
             <div className="w-12 h-px bg-accent" />
@@ -43,7 +43,7 @@ export function Vision() {
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.01 }}
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-8"
           >
@@ -56,7 +56,7 @@ export function Vision() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.01 }}
             transition={{ delay: 0.2 }}
             className="text-lg text-muted-foreground leading-relaxed"
           >
@@ -67,7 +67,7 @@ export function Vision() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.01 }}
             transition={{ delay: 0.3 }}
             className="mt-10 flex items-center gap-3"
           >

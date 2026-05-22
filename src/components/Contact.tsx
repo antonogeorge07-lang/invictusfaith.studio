@@ -122,7 +122,7 @@ export function Contact() {
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.01 }}
           >
             <h2 className="text-4xl md:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
               {t('contact.title')}{' '}
@@ -137,7 +137,7 @@ export function Contact() {
           <motion.form 
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.01 }}
             onSubmit={handleSubmit}
             className="space-y-4"
           >
