@@ -6,9 +6,7 @@ import { supabase } from '@/integrations/supabase/client'
 import { toast } from 'sonner'
 import { useLanguage } from '@/i18n/LanguageContext'
 import { z } from 'zod'
-
-type Category = 'feature' | 'bug' | 'idea' | 'support'
-type Priority = 'low' | 'medium' | 'high' | 'urgent'
+import { CheckCircle2, Copy, ExternalLink } from 'lucide-react'
 
 const contactSchema = z.object({
   name: z.string()
@@ -25,20 +23,12 @@ const contactSchema = z.object({
     .trim()
     .min(10, 'Message must be at least 10 characters')
     .max(2000, 'Message must be less than 2000 characters'),
-  category: z.enum(['feature','bug','idea','support']),
-  priority: z.enum(['low','medium','high','urgent']),
 })
 
 export function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    title: '',
-    message: '',
-    category: 'support' as Category,
-    priority: 'medium' as Priority,
-  })
+  const [formData, setFormData] = useState({ name: '', email: '', title: '', message: '' })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [success, setSuccess] = useState<{ portalUrl: string; email: string } | null>(null)
   const { t } = useLanguage()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,60 +36,60 @@ export function Contact() {
     setIsSubmitting(true)
 
     try {
-      const validatedData = contactSchema.parse(formData)
+      const v = contactSchema.parse(formData)
 
       const { data: inserted, error } = await supabase
         .from('requests')
         .insert({
-          submitter_name: validatedData.name,
-          submitter_email: validatedData.email,
-          title: validatedData.title,
-          description: validatedData.message,
-          category: validatedData.category,
-          priority: validatedData.priority,
+          submitter_name: v.name,
+          submitter_email: v.email,
+          title: v.title,
+          description: v.message,
+          category: 'support',
+          priority: 'medium',
         })
         .select('id, public_token')
         .single()
 
       if (error) throw error
 
-      // Staff notification (existing)
-      supabase.functions.invoke('send-contact-notification', {
-        body: {
-          name: validatedData.name,
-          email: validatedData.email,
-          message: `[${validatedData.category.toUpperCase()} / ${validatedData.priority}] ${validatedData.title}\n\n${validatedData.message}`,
-        },
-      }).catch((err) => console.error('Staff notification failed:', err))
-
-      // Customer confirmation with portal link
       if (inserted) {
+        // AI classification (fire-and-forget)
+        supabase.functions.invoke('classify-request', {
+          body: { request_id: inserted.id },
+        }).catch((err) => console.error('Classify failed:', err))
+
+        // Staff notification
+        supabase.functions.invoke('send-contact-notification', {
+          body: {
+            name: v.name,
+            email: v.email,
+            message: `${v.title}\n\n${v.message}`,
+          },
+        }).catch((err) => console.error('Staff notification failed:', err))
+
+        // Customer confirmation
+        const portalUrl = `${window.location.origin}/r/${inserted.public_token}`
         supabase.functions.invoke('send-transactional-email', {
           body: {
             templateName: 'request-received',
-            recipientEmail: validatedData.email,
+            recipientEmail: v.email,
             idempotencyKey: `request-received-${inserted.id}`,
-            templateData: {
-              name: validatedData.name,
-              title: validatedData.title,
-              portalUrl: `${window.location.origin}/r/${inserted.public_token}`,
-            },
+            templateData: { name: v.name, title: v.title, portalUrl },
           },
         }).catch((err) => console.error('Customer confirmation failed:', err))
-      }
 
-      toast.success(t('contact.success'), { description: t('contact.successDesc') })
-      setFormData({ name: '', email: '', title: '', message: '', category: 'support', priority: 'medium' })
+        setSuccess({ portalUrl, email: v.email })
+        setFormData({ name: '', email: '', title: '', message: '' })
+      }
     } catch (error: any) {
       if (error instanceof z.ZodError) {
-        const firstError = error.errors[0]
-        toast.error(t('contact.validationError'), { description: firstError.message })
+        toast.error(t('contact.validationError'), { description: error.errors[0].message })
         return
       }
-      
       const isRateLimit = error?.message?.includes('Rate limit exceeded')
       toast.error(
-        isRateLimit ? t('contact.rateLimitError') : t('contact.error'), 
+        isRateLimit ? t('contact.rateLimitError') : t('contact.error'),
         { description: isRateLimit ? t('contact.rateLimitDesc') : t('contact.errorDesc') }
       )
     } finally {
@@ -107,19 +97,27 @@ export function Contact() {
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const copyPortal = async () => {
+    if (!success) return
+    try {
+      await navigator.clipboard.writeText(success.portalUrl)
+      toast.success('Link copied')
+    } catch {
+      toast.error('Copy failed')
+    }
   }
 
   return (
     <footer className="relative bg-primary pt-24 pb-12 overflow-hidden">
-      {/* Decorative line */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
-      
+
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 mb-24">
-          {/* Left Side: Tagline */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.01 }}
@@ -133,86 +131,103 @@ export function Contact() {
             </p>
           </motion.div>
 
-          {/* Right Side: Form */}
-          <motion.form 
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.01 }}
-            onSubmit={handleSubmit}
-            className="space-y-4"
-          >
-            <input 
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder={t('contact.name')}
-              required
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
-            />
-            <input 
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder={t('contact.email')}
-              required
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
-            />
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              placeholder="Subject / Title"
-              required
-              maxLength={150}
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
-            />
-            <div className="grid grid-cols-2 gap-4">
-              <select
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground focus:outline-none focus:border-accent transition-colors appearance-none cursor-pointer"
-              >
-                <option value="support" className="bg-primary">Support</option>
-                <option value="feature" className="bg-primary">Feature Request</option>
-                <option value="bug" className="bg-primary">Bug Report</option>
-                <option value="idea" className="bg-primary">Idea</option>
-              </select>
-              <select
-                name="priority"
-                value={formData.priority}
-                onChange={handleChange}
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground focus:outline-none focus:border-accent transition-colors appearance-none cursor-pointer"
-              >
-                <option value="low" className="bg-primary">Low priority</option>
-                <option value="medium" className="bg-primary">Medium priority</option>
-                <option value="high" className="bg-primary">High priority</option>
-                <option value="urgent" className="bg-primary">Urgent</option>
-              </select>
-            </div>
-            <textarea 
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              placeholder={t('contact.messagePlaceholder')}
-              rows={4}
-              required
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors resize-none"
-            />
-            <button 
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full py-4 btn-electric rounded-2xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          {success ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-white/5 border border-accent/30 rounded-2xl p-8 flex flex-col justify-center"
             >
-              {isSubmitting ? t('contact.sending') : t('contact.send')}
-            </button>
-          </motion.form>
+              <div className="w-14 h-14 rounded-2xl bg-accent/10 border border-accent/30 flex items-center justify-center mb-5">
+                <CheckCircle2 className="w-7 h-7 text-accent" />
+              </div>
+              <h3 className="text-2xl font-bold text-primary-foreground mb-3">
+                Request received
+              </h3>
+              <p className="text-primary-foreground/70 leading-relaxed mb-6">
+                We sent a confirmation to <span className="text-accent">{success.email}</span> with your private portal link. Use it to reply, share files, and track progress. No login required.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <a
+                  href={success.portalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-electric px-5 py-3 rounded-2xl font-semibold text-sm inline-flex items-center justify-center gap-2"
+                >
+                  Open portal <ExternalLink className="w-4 h-4" />
+                </a>
+                <button
+                  onClick={copyPortal}
+                  className="px-5 py-3 rounded-2xl font-semibold text-sm border border-white/15 text-primary-foreground hover:bg-white/5 transition-colors inline-flex items-center justify-center gap-2"
+                >
+                  <Copy className="w-4 h-4" /> Copy link
+                </button>
+                <button
+                  onClick={() => setSuccess(null)}
+                  className="px-5 py-3 rounded-2xl font-semibold text-sm text-primary-foreground/60 hover:text-primary-foreground transition-colors"
+                >
+                  Send another
+                </button>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.form
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.01 }}
+              onSubmit={handleSubmit}
+              className="space-y-4"
+            >
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder={t('contact.name')}
+                required
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
+              />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder={t('contact.email')}
+                required
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
+              />
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="What do you need? (one line)"
+                required
+                maxLength={150}
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
+              />
+              <textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                placeholder={t('contact.messagePlaceholder')}
+                rows={5}
+                required
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors resize-none"
+              />
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-4 btn-electric rounded-2xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? t('contact.sending') : t('contact.send')}
+              </button>
+              <p className="text-xs text-primary-foreground/40 text-center">
+                We reply within 24 hours. You will get a private portal link to track your request.
+              </p>
+            </motion.form>
+          )}
         </div>
 
-        {/* Footer Bottom */}
         <div className="border-t border-white/10 pt-12 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col items-center md:items-start">
             <span className="text-xl font-bold text-primary-foreground tracking-tight">
@@ -222,7 +237,7 @@ export function Contact() {
               Faith. Invincible. Together.
             </p>
           </div>
-          
+
           <div className="flex gap-8 text-sm text-primary-foreground/60">
             <a href="#hero" className="hover:text-accent transition-colors">{t('nav.home')}</a>
             <a href="#mvps" className="hover:text-accent transition-colors">{t('nav.mvps')}</a>
