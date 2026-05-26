@@ -28,7 +28,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'hero.headline1': 'Building the Highways of',
     'hero.headline2': 'Digital Sovereignty.',
     'hero.headline3': 'Launching the Future of Agentic Automation.',
-    'hero.subtext': 'Based on the ground in Valencia, we engineer high-performance, self-hosted operational platforms for local businesses while actively developing next-generation AI product MVPs. You buy assets once and own them forever. No predatory subscriptions. No lock-in.',
+    'hero.subtext': 'Operating globally, we engineer high-performance, self-hosted operational platforms for businesses while actively developing next-generation AI product MVPs. You buy assets once and own them forever. No predatory subscriptions. No lock-in.',
     'hero.exploreMVPs': 'Explore Our Tracks',
     'hero.startCollab': 'Start a Project',
     'hero.scroll': 'Scroll to explore',
@@ -38,7 +38,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'vision.headline': 'Radical Transparency',
     'vision.faith': '&',
     'vision.headlineEnd': 'Ground-Level Trust',
-    'vision.description': "Invictus Faith Studio operates locally in Valencia, blending global enterprise IT delivery with a steadfast commitment to our neighborhood commerce ecosystem. All billing, contracts, and legal compliance are processed through our registered international corporate entity, delivering verified B2B validity. We don't lock you into endless local maintenance retainers; we deliver independent software assets that you own completely.",
+    'vision.description': "Invictus Faith Studio operates globally, blending enterprise IT delivery with a steadfast commitment to the commerce ecosystems we serve. All billing, contracts, and legal compliance are processed through our registered international corporate entity, delivering verified B2B validity. We don't lock you into endless maintenance retainers; we deliver independent software assets that you own completely.",
 
     // MVP Showcase
     'mvp.label': 'Our Architecture',
