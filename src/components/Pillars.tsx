@@ -95,7 +95,7 @@ export function Pillars() {
                 <h3 className="font-bold text-primary-foreground mb-4 text-lg">
                   {t(pillar.titleKey)}
                 </h3>
-                <p className="text-primary-foreground/70 leading-relaxed text-emerald-400 text-base">
+                <p className="text-primary-foreground/60 text-lg font-light text-emerald-400">
                   {t(pillar.descKey)}
                 </p>
               </div>
