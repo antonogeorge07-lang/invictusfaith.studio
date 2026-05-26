@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'sonner'
-import { LanguageProvider } from './i18n/LanguageContext'
+import { LanguageProvider } from '@/i18n/LanguageContext'
 import Index from './pages/Index'
 import Auth from './pages/Auth'
 import AdminOverview from './pages/admin/Overview'
