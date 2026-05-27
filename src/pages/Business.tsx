@@ -1,0 +1,395 @@
+'use client'
+
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { Check, ArrowRight, Zap, Globe, Bot, TrendingUp, CheckCircle2, ExternalLink, Copy } from 'lucide-react'
+import { z } from 'zod'
+import { toast } from 'sonner'
+import { Navbar } from '@/components/Navbar'
+import { Seo } from '@/components/Seo'
+import { supabase } from '@/integrations/supabase/client'
+
+const intakeSchema = z.object({
+  name: z.string().trim().min(1).max(100),
+  email: z.string().trim().email().max(255),
+  business: z.string().trim().min(1).max(150),
+  message: z.string().trim().min(10).max(2000),
+})
+
+type PackKey = 'launch' | 'automate'
+
+const PACKS: Record<PackKey, { title: string; price: string; cadence: string; tagline: string; features: string[]; cta: string; popular?: boolean }> = {
+  launch: {
+    title: 'Local Launch Pack',
+    price: '€1,490',
+    cadence: 'flat, one-time',
+    tagline: 'A high-ranking website for your local business, live in 7 days.',
+    features: [
+      'Up to 5 pages, mobile-first design',
+      'Local SEO setup (Google Business, schema, keywords)',
+      'Booking or contact form wired to your inbox',
+      'Fast hosting + SSL included for year one',
+      'Copywriting starter kit + brand-matched visuals',
+      '1 round of revisions, 7-day delivery',
+    ],
+    cta: 'Get my Launch quote',
+  },
+  automate: {
+    title: 'Core Automation Pack',
+    price: '€390',
+    cadence: 'per month',
+    tagline: 'AI that answers, follows up, and books while you work.',
+    features: [
+      'AI receptionist on WhatsApp + website',
+      'Quote / pricing bot trained on your services',
+      'Automatic review collection after each job',
+      'Lead follow-up sequences (email + SMS)',
+      'Monthly performance report + tuning',
+      'Cancel any time after month 3',
+    ],
+    cta: 'Start Automation',
+    popular: true,
+  },
+}
+
+export default function Business() {
+  const [selected, setSelected] = useState<PackKey | null>(null)
+  const [form, setForm] = useState({ name: '', email: '', business: '', message: '' })
+  const [submitting, setSubmitting] = useState(false)
+  const [success, setSuccess] = useState<{ portalUrl: string; email: string } | null>(null)
+
+  const openIntake = (pack: PackKey) => {
+    setSelected(pack)
+    setSuccess(null)
+    setTimeout(() => document.querySelector('#intake')?.scrollIntoView({ behavior: 'smooth' }), 50)
+  }
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!selected) return
+    setSubmitting(true)
+    try {
+      const v = intakeSchema.parse(form)
+      const pack = PACKS[selected]
+      const title = `${pack.title} request from ${v.business}`
+      const description = `Business: ${v.business}\nPackage: ${pack.title} (${pack.price} ${pack.cadence})\n\n${v.message}`
+
+      const { data: inserted, error } = await supabase
+        .from('requests')
+        .insert({
+          submitter_name: v.name,
+          submitter_email: v.email,
+          title,
+          description,
+          category: 'feature',
+          priority: selected === 'automate' ? 'high' : 'medium',
+        })
+        .select('id, public_token')
+        .single()
+
+      if (error) throw error
+      if (!inserted) throw new Error('No record returned')
+
+      supabase.functions.invoke('classify-request', { body: { request_id: inserted.id } })
+        .catch((err) => console.error('Classify failed:', err))
+
+      supabase.functions.invoke('send-contact-notification', {
+        body: { name: v.name, email: v.email, message: `${title}\n\n${description}` },
+      }).catch((err) => console.error('Staff notification failed:', err))
+
+      const portalUrl = `${window.location.origin}/r/${inserted.public_token}`
+      supabase.functions.invoke('send-transactional-email', {
+        body: {
+          templateName: 'request-received',
+          recipientEmail: v.email,
+          idempotencyKey: `request-received-${inserted.id}`,
+          templateData: { name: v.name, title, portalUrl },
+        },
+      }).catch((err) => console.error('Customer confirmation failed:', err))
+
+      setSuccess({ portalUrl, email: v.email })
+      setForm({ name: '', email: '', business: '', message: '' })
+    } catch (err: any) {
+      if (err instanceof z.ZodError) {
+        toast.error('Please check your details', { description: err.errors[0].message })
+      } else if (err?.message?.includes('Rate limit')) {
+        toast.error('Too many requests', { description: 'Please wait an hour before trying again.' })
+      } else {
+        toast.error('Something went wrong', { description: 'Try again in a moment.' })
+      }
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const copyPortal = async () => {
+    if (!success) return
+    try { await navigator.clipboard.writeText(success.portalUrl); toast.success('Link copied') }
+    catch { toast.error('Copy failed') }
+  }
+
+  return (
+    <div className="min-h-screen bg-background text-foreground font-poppins">
+      <Seo
+        title="Local Business Websites & AI Automation | Invictus Faith Studio"
+        description="High-ranking websites and AI automation built for local businesses. Flat-fee launch package and monthly automation retainer. Quote in 24 hours."
+        path="/business"
+      />
+      <Navbar />
+
+      {/* HERO */}
+      <section className="relative min-h-[88vh] flex items-center justify-center overflow-hidden pt-24">
+        <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/5 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="container mx-auto px-6 py-20 relative z-10">
+          <div className="max-w-5xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-border mb-8"
+            >
+              <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
+              <span className="text-sm font-medium text-muted-foreground">For local businesses ready to grow</span>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-foreground leading-[1.05] mb-8"
+            >
+              We Build <span className="text-accent">High-Ranking Websites</span> & AI Automation For Local Businesses
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 font-light"
+            >
+              Fixed prices. 7-day launch. AI that answers leads, books appointments, and follows up so you can focus on the work.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            >
+              <button
+                onClick={() => document.querySelector('#packs')?.scrollIntoView({ behavior: 'smooth' })}
+                className="btn-electric px-8 py-4 rounded-2xl text-lg font-semibold inline-flex items-center gap-2"
+              >
+                See packages <ArrowRight className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => openIntake('launch')}
+                className="px-8 py-4 rounded-2xl text-lg font-semibold border-2 border-primary text-foreground hover:bg-primary hover:text-primary-foreground transition-all"
+              >
+                Get a quote in 24h
+              </button>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto"
+            >
+              {[
+                { icon: Globe, label: '7-day launch' },
+                { icon: TrendingUp, label: 'Local SEO built in' },
+                { icon: Bot, label: 'AI lead handling' },
+                { icon: Zap, label: 'Flat, honest pricing' },
+              ].map(({ icon: Icon, label }) => (
+                <div key={label} className="flex flex-col items-center gap-2 text-muted-foreground">
+                  <Icon className="w-5 h-5 text-accent" />
+                  <span className="text-sm font-medium">{label}</span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* PACKAGES */}
+      <section id="packs" className="py-24 bg-background">
+        <div className="container mx-auto px-6">
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Two packages. Zero guesswork.</h2>
+            <p className="text-muted-foreground text-lg">Pick the one that fits. Launch your site, then layer in automation when you're ready.</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {(Object.keys(PACKS) as PackKey[]).map((key) => {
+              const p = PACKS[key]
+              return (
+                <motion.div
+                  key={key}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.5 }}
+                  className={`relative rounded-3xl border p-8 flex flex-col ${
+                    p.popular
+                      ? 'border-accent bg-accent/[0.04] shadow-[0_0_60px_-20px_hsl(var(--accent)/0.5)]'
+                      : 'border-border bg-card'
+                  }`}
+                >
+                  {p.popular && (
+                    <span className="absolute -top-3 right-6 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-bold uppercase tracking-wide">
+                      Most loved
+                    </span>
+                  )}
+                  <h3 className="text-2xl font-bold mb-2">{p.title}</h3>
+                  <p className="text-muted-foreground mb-6">{p.tagline}</p>
+                  <div className="flex items-baseline gap-2 mb-8">
+                    <span className="text-5xl font-extrabold text-foreground">{p.price}</span>
+                    <span className="text-muted-foreground">{p.cadence}</span>
+                  </div>
+                  <ul className="space-y-3 mb-8 flex-1">
+                    {p.features.map((f) => (
+                      <li key={f} className="flex items-start gap-3 text-sm text-foreground/80">
+                        <Check className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    onClick={() => openIntake(key)}
+                    className={`w-full py-4 rounded-2xl font-semibold text-base transition-all ${
+                      p.popular
+                        ? 'btn-electric'
+                        : 'border-2 border-primary text-foreground hover:bg-primary hover:text-primary-foreground'
+                    }`}
+                  >
+                    {p.cta}
+                  </button>
+                </motion.div>
+              )
+            })}
+          </div>
+
+          <p className="text-center text-sm text-muted-foreground mt-10">
+            Not sure which fits? <button onClick={() => openIntake('launch')} className="text-accent underline underline-offset-4 hover:opacity-80">Tell us about your business</button> and we'll recommend the right path.
+          </p>
+        </div>
+      </section>
+
+      {/* INTAKE */}
+      <section id="intake" className="py-24 bg-primary">
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 max-w-6xl mx-auto">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6 leading-tight">
+                Get your <span className="text-accent">quote in 24 hours</span>
+              </h2>
+              <p className="text-primary-foreground/60 text-lg font-light mb-8">
+                Tell us about your business. We'll send a fixed-price quote and a private portal link to track everything. No login required.
+              </p>
+              {selected && (
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/30 text-sm text-accent font-medium">
+                  Selected: {PACKS[selected].title}
+                </div>
+              )}
+            </div>
+
+            {success ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-white/5 border border-accent/30 rounded-2xl p-8 flex flex-col justify-center"
+              >
+                <div className="w-14 h-14 rounded-2xl bg-accent/10 border border-accent/30 flex items-center justify-center mb-5">
+                  <CheckCircle2 className="w-7 h-7 text-accent" />
+                </div>
+                <h3 className="text-2xl font-bold text-primary-foreground mb-3">Request received</h3>
+                <p className="text-primary-foreground/70 leading-relaxed mb-6">
+                  We sent a confirmation to <span className="text-accent">{success.email}</span> with your private portal link. We'll reply with a quote within 24 hours.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <a
+                    href={success.portalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-electric px-5 py-3 rounded-2xl font-semibold text-sm inline-flex items-center justify-center gap-2"
+                  >
+                    Open portal <ExternalLink className="w-4 h-4" />
+                  </a>
+                  <button
+                    onClick={copyPortal}
+                    className="px-5 py-3 rounded-2xl font-semibold text-sm border border-white/15 text-primary-foreground hover:bg-white/5 transition-colors inline-flex items-center justify-center gap-2"
+                  >
+                    <Copy className="w-4 h-4" /> Copy link
+                  </button>
+                </div>
+              </motion.div>
+            ) : (
+              <form onSubmit={onSubmit} className="space-y-4">
+                {!selected && (
+                  <div className="grid grid-cols-2 gap-3 mb-2">
+                    {(Object.keys(PACKS) as PackKey[]).map((k) => (
+                      <button
+                        type="button"
+                        key={k}
+                        onClick={() => setSelected(k)}
+                        className="px-4 py-3 rounded-2xl border border-white/15 text-primary-foreground/80 hover:border-accent hover:text-accent text-sm font-medium transition-colors"
+                      >
+                        {PACKS[k].title}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <input
+                  type="text"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  placeholder="Your name"
+                  required
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
+                />
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  placeholder="Email"
+                  required
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
+                />
+                <input
+                  type="text"
+                  value={form.business}
+                  onChange={(e) => setForm({ ...form, business: e.target.value })}
+                  placeholder="Business name"
+                  required
+                  maxLength={150}
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
+                />
+                <textarea
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  placeholder="What does your business do, and what do you need help with?"
+                  rows={5}
+                  required
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors resize-none"
+                />
+                <button
+                  type="submit"
+                  disabled={submitting || !selected}
+                  className="w-full py-4 btn-electric rounded-2xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {submitting ? 'Sending...' : selected ? `Request ${PACKS[selected].title} quote` : 'Pick a package above'}
+                </button>
+                <p className="text-xs text-primary-foreground/40 text-center">
+                  Quote within 24 hours. Private portal link emailed instantly.
+                </p>
+              </form>
+            )}
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
