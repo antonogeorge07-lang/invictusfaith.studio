@@ -81,7 +81,7 @@ export default function Business() {
           submitter_email: v.email,
           title,
           description,
-          category: 'project',
+          category: 'feature',
           priority: selected === 'automate' ? 'high' : 'medium',
         })
         .select('id, public_token')
