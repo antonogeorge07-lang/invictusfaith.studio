@@ -51,10 +51,10 @@ export function Navbar() {
             onClick={(e) => { e.preventDefault(); scrollToSection('#hero'); }}
             className="flex items-center gap-2"
           >
-            <span className="text-xl font-bold text-primary tracking-tight text-emerald-400">
+            <span className="text-primary tracking-tight text-emerald-400 text-lg font-semibold text-left border-0">
               Invictus Faith
             </span>
-            <span className="text-accent font-light text-emerald-400">Studio</span>
+            <span className="text-accent text-emerald-400 text-lg font-medium">Studio</span>
           </a>
 
           {/* Desktop Navigation */}
