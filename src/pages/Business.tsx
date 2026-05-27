@@ -158,7 +158,7 @@ export default function Business() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-foreground leading-[1.05] mb-8"
+              className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.1] tracking-tight mb-6"
             >
               We Build <span className="text-accent">High-Ranking Websites</span> & AI Automation For Local Businesses
             </motion.h1>
@@ -167,7 +167,7 @@ export default function Business() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 font-light"
+              className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto mb-10 font-light"
             >
               Fixed prices. 7-day launch. AI that answers leads, books appointments, and follows up so you can focus on the work.
             </motion.p>
