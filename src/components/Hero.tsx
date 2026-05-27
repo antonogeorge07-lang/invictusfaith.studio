@@ -38,7 +38,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-foreground leading-tight mb-8"
+            className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.1] tracking-tight mb-6"
           >
             {t('hero.headline1')}{' '}
             <span className="text-accent">{t('hero.headline2')}</span>{' '}
@@ -50,7 +50,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto mb-12 font-light"
+            className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto mb-10 font-light"
           >
             {t('hero.subtext')}
           </motion.p>
