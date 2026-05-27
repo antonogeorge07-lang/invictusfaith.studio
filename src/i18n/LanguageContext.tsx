@@ -30,7 +30,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const t = (key: string, vars?: Record<string, string>): string => {
     const raw = translations[language][key] || translations['en'][key] || key;
     if (!vars) return raw;
-    return Object.keys(vars).reduce((acc, k) => acc.replaceAll(`{{${k}}}`, vars[k]), raw);
+    return Object.keys(vars).reduce((acc, k) => acc.split(`{{${k}}}`).join(vars[k]), raw);
   };
 
 
