@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import { Navbar } from '@/components/Navbar'
 import { Seo } from '@/components/Seo'
 import { supabase } from '@/integrations/supabase/client'
+import { useLanguage } from '@/i18n/LanguageContext'
 
 const intakeSchema = z.object({
   name: z.string().trim().min(1).max(100),
@@ -18,45 +19,38 @@ const intakeSchema = z.object({
 
 type PackKey = 'launch' | 'automate'
 
-const PACKS: Record<PackKey, { title: string; price: string; cadence: string; tagline: string; features: string[]; cta: string; popular?: boolean }> = {
-  launch: {
-    title: 'Local Launch Pack',
-    price: '€1,490',
-    cadence: 'flat, one-time',
-    tagline: 'A high-ranking website for your local business, live in 7 days.',
-    features: [
-      'Up to 5 pages, mobile-first design',
-      'Local SEO setup (Google Business, schema, keywords)',
-      'Booking or contact form wired to your inbox',
-      'Fast hosting + SSL included for year one',
-      'Copywriting starter kit + brand-matched visuals',
-      '1 round of revisions, 7-day delivery',
-    ],
-    cta: 'Get my Launch quote',
-  },
-  automate: {
-    title: 'Core Automation Pack',
-    price: '€390',
-    cadence: 'per month',
-    tagline: 'AI that answers, follows up, and books while you work.',
-    features: [
-      'AI receptionist on WhatsApp + website',
-      'Quote / pricing bot trained on your services',
-      'Automatic review collection after each job',
-      'Lead follow-up sequences (email + SMS)',
-      'Monthly performance report + tuning',
-      'Cancel any time after month 3',
-    ],
-    cta: 'Start Automation',
-    popular: true,
-  },
-}
-
 export default function Business() {
+  const { t } = useLanguage()
   const [selected, setSelected] = useState<PackKey | null>(null)
   const [form, setForm] = useState({ name: '', email: '', business: '', message: '' })
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState<{ portalUrl: string; email: string } | null>(null)
+
+  const PACKS: Record<PackKey, { title: string; price: string; cadence: string; tagline: string; features: string[]; cta: string; popular?: boolean }> = {
+    launch: {
+      title: t('biz.launchTitle'),
+      price: '€1,490',
+      cadence: t('biz.launchCadence'),
+      tagline: t('biz.launchTagline'),
+      features: [
+        t('biz.launchF1'), t('biz.launchF2'), t('biz.launchF3'),
+        t('biz.launchF4'), t('biz.launchF5'), t('biz.launchF6'),
+      ],
+      cta: t('biz.launchCta'),
+    },
+    automate: {
+      title: t('biz.autoTitle'),
+      price: '€390',
+      cadence: t('biz.autoCadence'),
+      tagline: t('biz.autoTagline'),
+      features: [
+        t('biz.autoF1'), t('biz.autoF2'), t('biz.autoF3'),
+        t('biz.autoF4'), t('biz.autoF5'), t('biz.autoF6'),
+      ],
+      cta: t('biz.autoCta'),
+      popular: true,
+    },
+  }
 
   const openIntake = (pack: PackKey) => {
     setSelected(pack)
@@ -111,11 +105,11 @@ export default function Business() {
       setForm({ name: '', email: '', business: '', message: '' })
     } catch (err: any) {
       if (err instanceof z.ZodError) {
-        toast.error('Please check your details', { description: err.errors[0].message })
+        toast.error(t('biz.errCheck'), { description: err.errors[0].message })
       } else if (err?.message?.includes('Rate limit')) {
-        toast.error('Too many requests', { description: 'Please wait an hour before trying again.' })
+        toast.error(t('biz.errRate'), { description: t('biz.errRateDesc') })
       } else {
-        toast.error('Something went wrong', { description: 'Try again in a moment.' })
+        toast.error(t('biz.errGeneric'), { description: t('biz.errGenericDesc') })
       }
     } finally {
       setSubmitting(false)
@@ -124,8 +118,8 @@ export default function Business() {
 
   const copyPortal = async () => {
     if (!success) return
-    try { await navigator.clipboard.writeText(success.portalUrl); toast.success('Link copied') }
-    catch { toast.error('Copy failed') }
+    try { await navigator.clipboard.writeText(success.portalUrl); toast.success(t('biz.copied')) }
+    catch { toast.error(t('biz.copyFailed')) }
   }
 
   return (
@@ -151,7 +145,7 @@ export default function Business() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-border mb-8"
             >
               <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
-              <span className="text-sm font-medium text-muted-foreground">For local businesses ready to grow</span>
+              <span className="text-sm font-medium text-muted-foreground">{t('biz.badge')}</span>
             </motion.div>
 
             <motion.h1
@@ -160,7 +154,7 @@ export default function Business() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.1] tracking-tight mb-6"
             >
-              We Build <span className="text-accent">High-Ranking Websites</span> & AI Automation For Local Businesses
+              {t('biz.heroPre')} <span className="text-accent">{t('biz.heroAccent')}</span> {t('biz.heroPost')}
             </motion.h1>
 
             <motion.p
@@ -169,7 +163,7 @@ export default function Business() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto mb-10 font-light"
             >
-              Fixed prices. 7-day launch. AI that answers leads, books appointments, and follows up so you can focus on the work.
+              {t('biz.heroSub')}
             </motion.p>
 
             <motion.div
@@ -182,13 +176,13 @@ export default function Business() {
                 onClick={() => document.querySelector('#packs')?.scrollIntoView({ behavior: 'smooth' })}
                 className="btn-electric px-8 py-4 rounded-2xl text-lg font-semibold inline-flex items-center gap-2"
               >
-                See packages <ArrowRight className="w-5 h-5" />
+                {t('biz.ctaSee')} <ArrowRight className="w-5 h-5" />
               </button>
               <button
                 onClick={() => openIntake('launch')}
                 className="px-8 py-4 rounded-2xl text-lg font-semibold border-2 border-primary text-foreground hover:bg-primary hover:text-primary-foreground transition-all"
               >
-                Get a quote in 24h
+                {t('biz.ctaQuote')}
               </button>
             </motion.div>
 
@@ -199,10 +193,10 @@ export default function Business() {
               className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto"
             >
               {[
-                { icon: Globe, label: '7-day launch' },
-                { icon: TrendingUp, label: 'Local SEO built in' },
-                { icon: Bot, label: 'AI lead handling' },
-                { icon: Zap, label: 'Flat, honest pricing' },
+                { icon: Globe, label: t('biz.chip1') },
+                { icon: TrendingUp, label: t('biz.chip2') },
+                { icon: Bot, label: t('biz.chip3') },
+                { icon: Zap, label: t('biz.chip4') },
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="flex flex-col items-center gap-2 text-muted-foreground">
                   <Icon className="w-5 h-5 text-accent" />
@@ -218,8 +212,8 @@ export default function Business() {
       <section id="packs" className="py-24 bg-background">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Two packages. Zero guesswork.</h2>
-            <p className="text-muted-foreground text-lg">Pick the one that fits. Launch your site, then layer in automation when you're ready.</p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">{t('biz.packsTitle')}</h2>
+            <p className="text-muted-foreground text-lg">{t('biz.packsSub')}</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
@@ -240,7 +234,7 @@ export default function Business() {
                 >
                   {p.popular && (
                     <span className="absolute -top-3 right-6 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-bold uppercase tracking-wide">
-                      Most loved
+                      {t('biz.popular')}
                     </span>
                   )}
                   <h3 className="text-2xl font-bold mb-2">{p.title}</h3>
@@ -273,7 +267,11 @@ export default function Business() {
           </div>
 
           <p className="text-center text-sm text-muted-foreground mt-10">
-            Not sure which fits? <button onClick={() => openIntake('launch')} className="text-accent underline underline-offset-4 hover:opacity-80">Tell us about your business</button> and we'll recommend the right path.
+            {t('biz.notSurePre')}{' '}
+            <button onClick={() => openIntake('launch')} className="text-accent underline underline-offset-4 hover:opacity-80">
+              {t('biz.notSureLink')}
+            </button>{' '}
+            {t('biz.notSurePost')}
           </p>
         </div>
       </section>
@@ -284,14 +282,14 @@ export default function Business() {
           <div className="grid lg:grid-cols-2 gap-16 max-w-6xl mx-auto">
             <div>
               <h2 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6 leading-tight">
-                Get your <span className="text-accent">quote in 24 hours</span>
+                {t('biz.intakeTitlePre')} <span className="text-accent">{t('biz.intakeTitleAccent')}</span> {t('biz.intakeTitlePost')}
               </h2>
               <p className="text-primary-foreground/60 text-lg font-light mb-8">
-                Tell us about your business. We'll send a fixed-price quote and a private portal link to track everything. No login required.
+                {t('biz.intakeDesc')}
               </p>
               {selected && (
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/30 text-sm text-accent font-medium">
-                  Selected: {PACKS[selected].title}
+                  {t('biz.selected', { pack: PACKS[selected].title })}
                 </div>
               )}
             </div>
@@ -305,9 +303,9 @@ export default function Business() {
                 <div className="w-14 h-14 rounded-2xl bg-accent/10 border border-accent/30 flex items-center justify-center mb-5">
                   <CheckCircle2 className="w-7 h-7 text-accent" />
                 </div>
-                <h3 className="text-2xl font-bold text-primary-foreground mb-3">Request received</h3>
+                <h3 className="text-2xl font-bold text-primary-foreground mb-3">{t('biz.successTitle')}</h3>
                 <p className="text-primary-foreground/70 leading-relaxed mb-6">
-                  We sent a confirmation to <span className="text-accent">{success.email}</span> with your private portal link. We'll reply with a quote within 24 hours.
+                  {t('biz.successBody', { email: success.email })}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <a
@@ -316,13 +314,13 @@ export default function Business() {
                     rel="noopener noreferrer"
                     className="btn-electric px-5 py-3 rounded-2xl font-semibold text-sm inline-flex items-center justify-center gap-2"
                   >
-                    Open portal <ExternalLink className="w-4 h-4" />
+                    {t('biz.openPortal')} <ExternalLink className="w-4 h-4" />
                   </a>
                   <button
                     onClick={copyPortal}
                     className="px-5 py-3 rounded-2xl font-semibold text-sm border border-white/15 text-primary-foreground hover:bg-white/5 transition-colors inline-flex items-center justify-center gap-2"
                   >
-                    <Copy className="w-4 h-4" /> Copy link
+                    <Copy className="w-4 h-4" /> {t('biz.copyLink')}
                   </button>
                 </div>
               </motion.div>
@@ -346,7 +344,7 @@ export default function Business() {
                   type="text"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="Your name"
+                  placeholder={t('biz.fName')}
                   required
                   className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
                 />
@@ -354,7 +352,7 @@ export default function Business() {
                   type="email"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  placeholder="Email"
+                  placeholder={t('biz.fEmail')}
                   required
                   className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
                 />
@@ -362,7 +360,7 @@ export default function Business() {
                   type="text"
                   value={form.business}
                   onChange={(e) => setForm({ ...form, business: e.target.value })}
-                  placeholder="Business name"
+                  placeholder={t('biz.fBiz')}
                   required
                   maxLength={150}
                   className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors"
@@ -370,7 +368,7 @@ export default function Business() {
                 <textarea
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  placeholder="What does your business do, and what do you need help with?"
+                  placeholder={t('biz.fMsg')}
                   rows={5}
                   required
                   className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:border-accent transition-colors resize-none"
@@ -380,10 +378,10 @@ export default function Business() {
                   disabled={submitting || !selected}
                   className="w-full py-4 btn-electric rounded-2xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {submitting ? 'Sending...' : selected ? `Request ${PACKS[selected].title} quote` : 'Pick a package above'}
+                  {submitting ? t('biz.sending') : selected ? t('biz.submitWith', { pack: PACKS[selected].title }) : t('biz.submitPick')}
                 </button>
                 <p className="text-xs text-primary-foreground/40 text-center">
-                  Quote within 24 hours. Private portal link emailed instantly.
+                  {t('biz.footnote')}
                 </p>
               </form>
             )}
