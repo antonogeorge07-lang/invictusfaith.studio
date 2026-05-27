@@ -18,6 +18,7 @@ export default function App() {
         <Toaster position="top-center" richColors />
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/business" element={<Business />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/admin" element={<AdminOverview />} />
           <Route path="/admin/inbox" element={<AdminInbox />} />
