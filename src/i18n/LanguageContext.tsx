@@ -4,8 +4,9 @@ import { Language, translations } from './translations';
 type LanguageContextType = {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  t: (key: string, vars?: Record<string, string>) => string;
 };
+
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
