@@ -69,6 +69,12 @@ export function Navbar() {
                 {link.label}
               </a>
             ))}
+            <a
+              href="/studio"
+              className="text-sm font-medium text-muted-foreground hover:text-accent transition-colors text-emerald-500"
+            >
+              Studio
+            </a>
             <LanguageSwitcher />
             <button
               onClick={() => scrollToSection('#contact')}
