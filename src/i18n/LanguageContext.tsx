@@ -4,8 +4,9 @@ import { Language, translations } from './translations';
 type LanguageContextType = {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  t: (key: string, vars?: Record<string, string>) => string;
 };
+
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
@@ -26,9 +27,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('language', lang);
   };
 
-  const t = (key: string): string => {
-    return translations[language][key] || translations['en'][key] || key;
+  const t = (key: string, vars?: Record<string, string>): string => {
+    const raw = translations[language][key] || translations['en'][key] || key;
+    if (!vars) return raw;
+    return Object.keys(vars).reduce((acc, k) => acc.split(`{{${k}}}`).join(vars[k]), raw);
   };
+
 
   useEffect(() => {
     document.documentElement.lang = language;
