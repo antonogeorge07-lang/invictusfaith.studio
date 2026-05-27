@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'sonner'
 import Index from './pages/Index'
+import Business from './pages/Business'
 import Auth from './pages/Auth'
 import AdminOverview from './pages/admin/Overview'
 import AdminInbox from './pages/admin/Inbox'
