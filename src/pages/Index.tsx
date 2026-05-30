@@ -30,6 +30,9 @@ export default function Index() {
         <section id="mvps" aria-label="MVP Showcase section">
           <MVPShowcase />
         </section>
+        <section id="samples" aria-label="Sample websites">
+          <Samples />
+        </section>
         <section id="pillars" aria-label="Pillars section">
           <Pillars />
         </section>
