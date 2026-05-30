@@ -3,6 +3,7 @@ import { Hero } from '@/components/Hero'
 import { Vision } from '@/components/Vision'
 import { About } from '@/components/About'
 import { MVPShowcase } from '@/components/MVPShowcase'
+import { Samples } from '@/components/Samples'
 import { Pillars } from '@/components/Pillars'
 import { Contact } from '@/components/Contact'
 import { Seo } from '@/components/Seo'
@@ -28,6 +29,9 @@ export default function Index() {
         </section>
         <section id="mvps" aria-label="MVP Showcase section">
           <MVPShowcase />
+        </section>
+        <section id="samples" aria-label="Sample websites">
+          <Samples />
         </section>
         <section id="pillars" aria-label="Pillars section">
           <Pillars />
