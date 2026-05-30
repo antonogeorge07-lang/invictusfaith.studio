@@ -19,6 +19,10 @@ export const languageNames: Record<Language, string> = {
  */
 export const translations: Record<Language, Record<string, string>> = {
   en: {
+    'samples.label': "Sample work",
+    'samples.title': "Recent websites we built",
+    'samples.description': "A few live sites and products from our studio. Click any card to open it.",
+    'samples.view': "Visit site",
     'nav.home': 'Home',
     'nav.about': 'About',
     'nav.mvps': 'Packages',
@@ -149,6 +153,10 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   es: {
+    'samples.label': "Trabajos recientes",
+    'samples.title': "Webs que hemos lanzado",
+    'samples.description': "Algunos sitios y productos en vivo de nuestro estudio. Haz clic para abrirlos.",
+    'samples.view': "Ver sitio",
     'nav.home': 'Inicio',
     'nav.about': 'Nosotros',
     'nav.mvps': 'Paquetes',
@@ -279,6 +287,10 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   ru: {
+    'samples.label': "Примеры работ",
+    'samples.title': "Сайты, которые мы сделали",
+    'samples.description': "Несколько живых сайтов и продуктов нашей студии. Нажмите, чтобы открыть.",
+    'samples.view': "Открыть сайт",
     'nav.home': 'Главная',
     'nav.about': 'О нас',
     'nav.mvps': 'Пакеты',
@@ -409,6 +421,10 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   hu: {
+    'samples.label': "Mintamunkák",
+    'samples.title': "Általunk készített weboldalak",
+    'samples.description': "Néhány élő oldal és termék a stúdiónktól. Kattints bármelyikre.",
+    'samples.view': "Megnyitás",
     'nav.home': 'Főoldal',
     'nav.about': 'Rólunk',
     'nav.mvps': 'Csomagok',
@@ -539,6 +555,10 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   pt: {
+    'samples.label': "Trabalhos recentes",
+    'samples.title': "Sites que construímos",
+    'samples.description': "Alguns sites e produtos no ar do nosso estúdio. Clique para abrir.",
+    'samples.view': "Ver site",
     'nav.home': 'Início',
     'nav.about': 'Sobre',
     'nav.mvps': 'Pacotes',
@@ -669,6 +689,10 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   fr: {
+    'samples.label': "Exemples",
+    'samples.title': "Sites web récents",
+    'samples.description': "Quelques sites et produits en ligne de notre studio. Cliquez pour ouvrir.",
+    'samples.view': "Voir le site",
     'nav.home': 'Accueil',
     'nav.about': 'À propos',
     'nav.mvps': 'Offres',
@@ -799,6 +823,10 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   de: {
+    'samples.label': "Beispiele",
+    'samples.title': "Aktuelle Websites",
+    'samples.description': "Einige Live-Sites und Produkte aus unserem Studio. Klicken zum Öffnen.",
+    'samples.view': "Website ansehen",
     'nav.home': 'Start',
     'nav.about': 'Über uns',
     'nav.mvps': 'Pakete',
@@ -929,6 +957,10 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   it: {
+    'samples.label': "Lavori recenti",
+    'samples.title': "Siti che abbiamo creato",
+    'samples.description': "Alcuni siti e prodotti live del nostro studio. Clicca per aprirli.",
+    'samples.view': "Apri sito",
     'nav.home': 'Home',
     'nav.about': 'Chi siamo',
     'nav.mvps': 'Pacchetti',
@@ -1059,6 +1091,10 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   pl: {
+    'samples.label': "Przykłady",
+    'samples.title': "Strony, które zrobiliśmy",
+    'samples.description': "Kilka działających stron i produktów naszego studia. Kliknij, aby otworzyć.",
+    'samples.view': "Otwórz stronę",
     'nav.home': 'Start',
     'nav.about': 'O nas',
     'nav.mvps': 'Pakiety',
@@ -1189,6 +1225,10 @@ export const translations: Record<Language, Record<string, string>> = {
   },
 
   nl: {
+    'samples.label': "Voorbeelden",
+    'samples.title': "Recente websites",
+    'samples.description': "Een paar live sites en producten van onze studio. Klik om te openen.",
+    'samples.view': "Bekijk site",
     'nav.home': 'Home',
     'nav.about': 'Over ons',
     'nav.mvps': 'Pakketten',
