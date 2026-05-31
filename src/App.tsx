@@ -9,25 +9,22 @@ import AdminBoard from './pages/admin/Board'
 import RequestPortal from './pages/RequestPortal'
 import Unsubscribe from './pages/Unsubscribe'
 import NotFound from './pages/NotFound'
-import { LanguageProvider } from './i18n/LanguageContext'
 
 export default function App() {
   return (
     <BrowserRouter>
-      <LanguageProvider>
-        <Toaster position="top-center" richColors />
-        <Routes>
-          <Route path="/" element={<Business />} />
-          <Route path="/studio" element={<Index />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/admin" element={<AdminOverview />} />
-          <Route path="/admin/inbox" element={<AdminInbox />} />
-          <Route path="/admin/board" element={<AdminBoard />} />
-          <Route path="/r/:token" element={<RequestPortal />} />
-          <Route path="/unsubscribe" element={<Unsubscribe />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </LanguageProvider>
+      <Toaster position="top-center" richColors />
+      <Routes>
+        <Route path="/" element={<Business />} />
+        <Route path="/studio" element={<Index />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/admin" element={<AdminOverview />} />
+        <Route path="/admin/inbox" element={<AdminInbox />} />
+        <Route path="/admin/board" element={<AdminBoard />} />
+        <Route path="/r/:token" element={<RequestPortal />} />
+        <Route path="/unsubscribe" element={<Unsubscribe />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </BrowserRouter>
   )
 }
