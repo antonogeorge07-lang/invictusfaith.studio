@@ -113,7 +113,7 @@ export default function Business() {
       setForm({ name: '', email: '', business: '', message: '' })
     } catch (err: unknown) {
       if (err instanceof z.ZodError) {
-        toast.error(t('biz.errCheck'), { description: err.errors[0].message })
+        toast.error(t('biz.errCheck'), { description: t('biz.errValidationDesc') })
       } else if (err instanceof Error && err.message.includes('Rate limit')) {
         toast.error(t('biz.errRate'), { description: t('biz.errRateDesc') })
       } else {
