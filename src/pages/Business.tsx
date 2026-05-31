@@ -99,7 +99,7 @@ export default function Business() {
           title,
           description,
           category: 'feature',
-          priority: selected === 'automate' ? 'high' : 'medium',
+          priority: selected === 'pro' ? 'high' : selected === 'growth' ? 'medium' : 'low',
         })
         .select('id, public_token')
         .single()
@@ -202,7 +202,7 @@ export default function Business() {
                 {t('biz.ctaSee')} <ArrowRight className="w-5 h-5" />
               </button>
               <button
-                onClick={() => openIntake('launch')}
+                onClick={() => openIntake('growth')}
                 className="px-8 py-4 rounded-2xl text-lg font-semibold border-2 border-primary text-foreground hover:bg-primary hover:text-primary-foreground transition-all"
               >
                 {t('biz.ctaQuote')}
@@ -291,7 +291,7 @@ export default function Business() {
 
           <p className="text-center text-sm text-muted-foreground mt-10">
             {t('biz.notSurePre')}{' '}
-            <button onClick={() => openIntake('launch')} className="text-accent underline underline-offset-4 hover:opacity-80">
+            <button onClick={() => openIntake('growth')} className="text-accent underline underline-offset-4 hover:opacity-80">
               {t('biz.notSureLink')}
             </button>{' '}
             {t('biz.notSurePost')}
