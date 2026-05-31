@@ -126,10 +126,10 @@ export default function Business() {
 
       setSuccess({ portalUrl, email: v.email })
       setForm({ name: '', email: '', business: '', message: '' })
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (err instanceof z.ZodError) {
         toast.error(t('biz.errCheck'), { description: err.errors[0].message })
-      } else if (err?.message?.includes('Rate limit')) {
+      } else if (err instanceof Error && err.message.includes('Rate limit')) {
         toast.error(t('biz.errRate'), { description: t('biz.errRateDesc') })
       } else {
         toast.error(t('biz.errGeneric'), { description: t('biz.errGenericDesc') })
