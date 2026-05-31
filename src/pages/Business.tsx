@@ -307,7 +307,7 @@ export default function Business() {
               <h2 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6 leading-tight">
                 {t('biz.intakeTitlePre')} <span className="text-accent">{t('biz.intakeTitleAccent')}</span> {t('biz.intakeTitlePost')}
               </h2>
-              <p className="text-primary-foreground/60 text-lg font-light mb-8">
+              <p className="text-primary-foreground/80 text-lg font-light mb-8">
                 {t('biz.intakeDesc')}
               </p>
               {selected && (
