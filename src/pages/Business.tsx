@@ -19,6 +19,12 @@ const intakeSchema = z.object({
 
 type PackKey = 'starter' | 'growth' | 'pro'
 
+const PLAN_FEATURES: Record<PackKey, string[]> = {
+  starter: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'],
+  growth: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'],
+  pro: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'],
+}
+
 export default function Business() {
   const { t } = useLanguage()
   const [selected, setSelected] = useState<PackKey | null>(null)
@@ -28,50 +34,29 @@ export default function Business() {
 
   const PACKS: Record<PackKey, { title: string; price: string; cadence: string; tagline: string; features: string[]; cta: string; popular?: boolean }> = {
     starter: {
-      title: 'Starter',
+      title: t('biz.plan.starter.title'),
       price: '€89',
-      cadence: '/mo',
-      tagline: 'For barbers, cafés, autónomos getting online fast.',
-      features: [
-        '1-page mobile-first site',
-        'Google Business profile setup',
-        'WhatsApp click-to-chat button',
-        'Local SEO basics + schema',
-        'Hosting + SSL included',
-        'Email support',
-      ],
-      cta: 'Start with Starter',
+      cadence: t('biz.plan.cadence'),
+      tagline: t('biz.plan.starter.tagline'),
+      features: PLAN_FEATURES.starter.map((feature) => t(`biz.plan.starter.${feature}`)),
+      cta: t('biz.plan.starter.cta'),
     },
     growth: {
-      title: 'Growth',
+      title: t('biz.plan.growth.title'),
       price: '€189',
-      cadence: '/mo',
-      tagline: 'For restaurants, clinics, gyms ready to convert visitors.',
-      features: [
-        'Multi-page website (up to 5)',
-        'Online booking or live menu',
-        'Basic automation (forms, reminders)',
-        'Google Business + reviews flow',
-        'Monthly content update',
-        'Priority email support',
-      ],
-      cta: 'Choose Growth',
+      cadence: t('biz.plan.cadence'),
+      tagline: t('biz.plan.growth.tagline'),
+      features: PLAN_FEATURES.growth.map((feature) => t(`biz.plan.growth.${feature}`)),
+      cta: t('biz.plan.growth.cta'),
       popular: true,
     },
     pro: {
-      title: 'Pro',
+      title: t('biz.plan.pro.title'),
       price: '€300',
-      cadence: '/mo',
-      tagline: 'Full automation + AI agent answering 24/7.',
-      features: [
-        'Everything in Growth',
-        'AI receptionist on WhatsApp + web',
-        'Quote / pricing bot trained on your services',
-        'Lead follow-up sequences (email + SMS)',
-        'Automatic review collection',
-        'Monthly performance report + tuning',
-      ],
-      cta: 'Go Pro',
+      cadence: t('biz.plan.cadence'),
+      tagline: t('biz.plan.pro.tagline'),
+      features: PLAN_FEATURES.pro.map((feature) => t(`biz.plan.pro.${feature}`)),
+      cta: t('biz.plan.pro.cta'),
     },
   }
 
@@ -88,8 +73,8 @@ export default function Business() {
     try {
       const v = intakeSchema.parse(form)
       const pack = PACKS[selected]
-      const title = `${pack.title} request from ${v.business}`
-      const description = `Business: ${v.business}\nPackage: ${pack.title} (${pack.price} ${pack.cadence})\n\n${v.message}`
+      const title = t('biz.requestTitle', { pack: pack.title, business: v.business })
+      const description = t('biz.requestBody', { business: v.business, pack: pack.title, price: pack.price, cadence: pack.cadence, message: v.message })
 
       const { data: inserted, error } = await supabase
         .from('requests')
@@ -148,8 +133,8 @@ export default function Business() {
   return (
     <div className="min-h-screen bg-background text-foreground font-poppins">
       <Seo
-        title="Local Business Websites & AI Automation | Invictus Faith Studio"
-        description="High-ranking websites and AI automation built for local businesses. Flat-fee launch package and monthly automation retainer. Quote in 24 hours."
+        title={t('biz.seoTitle')}
+        description={t('biz.seoDescription')}
         path="/business"
       />
       <Navbar />
