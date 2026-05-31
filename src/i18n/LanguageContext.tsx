@@ -52,7 +52,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     fallbackLanguageContext.language = language;
     fallbackLanguageContext.t = (key, vars) => translate(language, key, vars);
-  }, []);
+  }, [language]);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
