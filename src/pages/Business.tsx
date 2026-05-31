@@ -17,7 +17,7 @@ const intakeSchema = z.object({
   message: z.string().trim().min(10).max(2000),
 })
 
-type PackKey = 'launch' | 'automate'
+type PackKey = 'starter' | 'growth' | 'pro'
 
 export default function Business() {
   const { t } = useLanguage()
@@ -27,28 +27,51 @@ export default function Business() {
   const [success, setSuccess] = useState<{ portalUrl: string; email: string } | null>(null)
 
   const PACKS: Record<PackKey, { title: string; price: string; cadence: string; tagline: string; features: string[]; cta: string; popular?: boolean }> = {
-    launch: {
-      title: t('biz.launchTitle'),
-      price: '€1,490',
-      cadence: t('biz.launchCadence'),
-      tagline: t('biz.launchTagline'),
+    starter: {
+      title: 'Starter',
+      price: '€89',
+      cadence: '/mo',
+      tagline: 'For barbers, cafés, autónomos getting online fast.',
       features: [
-        t('biz.launchF1'), t('biz.launchF2'), t('biz.launchF3'),
-        t('biz.launchF4'), t('biz.launchF5'), t('biz.launchF6'),
+        '1-page mobile-first site',
+        'Google Business profile setup',
+        'WhatsApp click-to-chat button',
+        'Local SEO basics + schema',
+        'Hosting + SSL included',
+        'Email support',
       ],
-      cta: t('biz.launchCta'),
+      cta: 'Start with Starter',
     },
-    automate: {
-      title: t('biz.autoTitle'),
-      price: '€390',
-      cadence: t('biz.autoCadence'),
-      tagline: t('biz.autoTagline'),
+    growth: {
+      title: 'Growth',
+      price: '€189',
+      cadence: '/mo',
+      tagline: 'For restaurants, clinics, gyms ready to convert visitors.',
       features: [
-        t('biz.autoF1'), t('biz.autoF2'), t('biz.autoF3'),
-        t('biz.autoF4'), t('biz.autoF5'), t('biz.autoF6'),
+        'Multi-page website (up to 5)',
+        'Online booking or live menu',
+        'Basic automation (forms, reminders)',
+        'Google Business + reviews flow',
+        'Monthly content update',
+        'Priority email support',
       ],
-      cta: t('biz.autoCta'),
+      cta: 'Choose Growth',
       popular: true,
+    },
+    pro: {
+      title: 'Pro',
+      price: '€300',
+      cadence: '/mo',
+      tagline: 'Full automation + AI agent answering 24/7.',
+      features: [
+        'Everything in Growth',
+        'AI receptionist on WhatsApp + web',
+        'Quote / pricing bot trained on your services',
+        'Lead follow-up sequences (email + SMS)',
+        'Automatic review collection',
+        'Monthly performance report + tuning',
+      ],
+      cta: 'Go Pro',
     },
   }
 
@@ -76,7 +99,7 @@ export default function Business() {
           title,
           description,
           category: 'feature',
-          priority: selected === 'automate' ? 'high' : 'medium',
+          priority: selected === 'pro' ? 'high' : selected === 'growth' ? 'medium' : 'low',
         })
         .select('id, public_token')
         .single()
@@ -179,7 +202,7 @@ export default function Business() {
                 {t('biz.ctaSee')} <ArrowRight className="w-5 h-5" />
               </button>
               <button
-                onClick={() => openIntake('launch')}
+                onClick={() => openIntake('growth')}
                 className="px-8 py-4 rounded-2xl text-lg font-semibold border-2 border-primary text-foreground hover:bg-primary hover:text-primary-foreground transition-all"
               >
                 {t('biz.ctaQuote')}
@@ -216,7 +239,7 @@ export default function Business() {
             <p className="text-muted-foreground text-lg">{t('biz.packsSub')}</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {(Object.keys(PACKS) as PackKey[]).map((key) => {
               const p = PACKS[key]
               return (
@@ -268,7 +291,7 @@ export default function Business() {
 
           <p className="text-center text-sm text-muted-foreground mt-10">
             {t('biz.notSurePre')}{' '}
-            <button onClick={() => openIntake('launch')} className="text-accent underline underline-offset-4 hover:opacity-80">
+            <button onClick={() => openIntake('growth')} className="text-accent underline underline-offset-4 hover:opacity-80">
               {t('biz.notSureLink')}
             </button>{' '}
             {t('biz.notSurePost')}
@@ -327,7 +350,7 @@ export default function Business() {
             ) : (
               <form onSubmit={onSubmit} className="space-y-4">
                 {!selected && (
-                  <div className="grid grid-cols-2 gap-3 mb-2">
+                  <div className="grid grid-cols-3 gap-2 mb-2">
                     {(Object.keys(PACKS) as PackKey[]).map((k) => (
                       <button
                         type="button"
