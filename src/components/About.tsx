@@ -88,18 +88,6 @@ export function About() {
             Watch our process unfold frame by frame
           </p>
 
-          {/* Maker credit */}
-          <div className="mt-6 inline-flex items-center gap-2 text-sm text-muted-foreground">
-            <span>Crafted by</span>
-            <a
-              href="https://www.linkedin.com/in/antonogeorge"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-semibold text-foreground hover:text-accent-emerald transition-colors"
-            >
-              Antono George, Founder
-            </a>
-          </div>
         </div>
 
         {/* Film Strip Container */}
