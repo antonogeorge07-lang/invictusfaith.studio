@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { supabase } from '@/integrations/supabase/client'
 import { toast } from 'sonner'
-import { AdminLayout } from '@/components/admin/AdminLayout'
 import {
   STATUSES, STATUS_LABEL, STATUS_COLOR, PRIORITY_COLOR, CATEGORY_LABEL,
   type RequestRow, type Status
@@ -16,36 +15,25 @@ import {
 } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
 import { GripVertical } from 'lucide-react'
-import { Seo } from '@/components/Seo'
 
 function Card({ r }: { r: RequestRow }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id: r.id,
-    data: { request: r },
+    id: r.id, data: { request: r },
   })
   const style = {
     transform: CSS.Translate.toString(transform),
     opacity: isDragging ? 0.4 : 1,
   }
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      className="bg-white/5 border border-white/10 hover:border-accent/40 rounded-xl p-3 cursor-grab active:cursor-grabbing transition-colors"
-    >
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}
+      className="bg-white/5 border border-white/10 hover:border-accent/40 rounded-xl p-3 cursor-grab active:cursor-grabbing transition-colors">
       <div className="flex items-start gap-2">
         <GripVertical className="w-3 h-3 text-primary-foreground/30 mt-1 shrink-0" />
         <div className="min-w-0 flex-1">
           <p className="text-primary-foreground text-sm font-medium line-clamp-2">{r.title}</p>
           <div className="flex flex-wrap gap-1 mt-2">
-            <span className={`text-[9px] uppercase px-1.5 py-0.5 rounded border ${PRIORITY_COLOR[r.priority]}`}>
-              {r.priority}
-            </span>
-            <span className="text-[9px] uppercase px-1.5 py-0.5 rounded border border-white/10 text-primary-foreground/50">
-              {CATEGORY_LABEL[r.category]}
-            </span>
+            <span className={`text-[9px] uppercase px-1.5 py-0.5 rounded border ${PRIORITY_COLOR[r.priority]}`}>{r.priority}</span>
+            <span className="text-[9px] uppercase px-1.5 py-0.5 rounded border border-white/10 text-primary-foreground/50">{CATEGORY_LABEL[r.category]}</span>
           </div>
           <p className="text-primary-foreground/40 text-[10px] mt-2 truncate">{r.submitter_name}</p>
         </div>
@@ -59,17 +47,13 @@ function Column({ status, items }: { status: Status; items: RequestRow[] }) {
   return (
     <div className="flex flex-col w-72 shrink-0">
       <div className="flex items-center justify-between mb-3 px-1">
-        <span className={`text-xs uppercase px-2 py-1 rounded-md border ${STATUS_COLOR[status]}`}>
-          {STATUS_LABEL[status]}
-        </span>
+        <span className={`text-xs uppercase px-2 py-1 rounded-md border ${STATUS_COLOR[status]}`}>{STATUS_LABEL[status]}</span>
         <span className="text-primary-foreground/40 text-xs">{items.length}</span>
       </div>
-      <div
-        ref={setNodeRef}
+      <div ref={setNodeRef}
         className={`flex-1 min-h-[400px] glass-card rounded-2xl p-3 space-y-2 border transition-colors ${
           isOver ? 'border-accent/50 bg-accent/5' : 'border-white/10'
-        }`}
-      >
+        }`}>
         {items.length === 0 && (
           <p className="text-primary-foreground/30 text-xs text-center py-8">Drop here</p>
         )}
@@ -79,7 +63,7 @@ function Column({ status, items }: { status: Status; items: RequestRow[] }) {
   )
 }
 
-export default function AdminBoard() {
+export function BoardBody() {
   const [requests, setRequests] = useState<RequestRow[]>([])
   const [loading, setLoading] = useState(true)
   const [activeReq, setActiveReq] = useState<RequestRow | null>(null)
@@ -88,17 +72,14 @@ export default function AdminBoard() {
   useEffect(() => {
     fetchAll()
     const channel = supabase
-      .channel('requests-board')
+      .channel('requests-board-body')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'requests' }, () => fetchAll())
       .subscribe()
     return () => { supabase.removeChannel(channel) }
   }, [])
 
   async function fetchAll() {
-    const { data, error } = await supabase
-      .from('requests')
-      .select('*')
-      .order('created_at', { ascending: false })
+    const { data, error } = await supabase.from('requests').select('*').order('created_at', { ascending: false })
     if (error) { toast.error('Failed to load'); return }
     setRequests((data ?? []) as RequestRow[])
     setLoading(false)
@@ -117,50 +98,30 @@ export default function AdminBoard() {
     if (!STATUSES.includes(newStatus)) return
     const req = requests.find(r => r.id === active.id)
     if (!req || req.status === newStatus) return
-
-    // Optimistic
     setRequests(prev => prev.map(r => r.id === req.id ? { ...r, status: newStatus } : r))
     const { error } = await supabase.from('requests').update({ status: newStatus }).eq('id', req.id)
-    if (error) {
-      toast.error('Update failed')
-      fetchAll()
-    } else {
-      toast.success(`Moved to ${STATUS_LABEL[newStatus]}`)
-      notifyStatusChange(req, newStatus)
-    }
+    if (error) { toast.error('Update failed'); fetchAll() }
+    else { toast.success(`Moved to ${STATUS_LABEL[newStatus]}`); notifyStatusChange(req, newStatus) }
   }
 
+  if (loading) return <div className="text-primary-foreground/60 text-center py-12">Loading...</div>
+
   return (
-    <AdminLayout title="Kanban Board">
-      <Seo title="Kanban Board | Invictus Faith Studio" description="Drag-and-drop project pipeline view." path="/admin/board" noindex />
-      {loading ? (
-        <div className="text-primary-foreground/60 text-center py-12">Loading...</div>
-      ) : (
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCorners}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-        >
-          <div className="overflow-x-auto pb-4 -mx-2 px-2">
-            <motion.div
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              className="flex gap-4 min-w-max"
-            >
-              {STATUSES.map(s => (
-                <Column key={s} status={s} items={requests.filter(r => r.status === s)} />
-              ))}
-            </motion.div>
+    <DndContext sensors={sensors} collisionDetection={closestCorners} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      <div className="overflow-x-auto pb-4 -mx-2 px-2">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-4 min-w-max">
+          {STATUSES.map(s => (
+            <Column key={s} status={s} items={requests.filter(r => r.status === s)} />
+          ))}
+        </motion.div>
+      </div>
+      <DragOverlay>
+        {activeReq && (
+          <div className="bg-primary border-2 border-accent rounded-xl p-3 shadow-2xl rotate-3 w-72">
+            <p className="text-primary-foreground text-sm font-medium">{activeReq.title}</p>
           </div>
-          <DragOverlay>
-            {activeReq && (
-              <div className="bg-primary border-2 border-accent rounded-xl p-3 shadow-2xl rotate-3 w-72">
-                <p className="text-primary-foreground text-sm font-medium">{activeReq.title}</p>
-              </div>
-            )}
-          </DragOverlay>
-        </DndContext>
-      )}
-    </AdminLayout>
+        )}
+      </DragOverlay>
+    </DndContext>
   )
 }

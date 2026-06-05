@@ -4,18 +4,16 @@ import { useEffect, useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { supabase } from '@/integrations/supabase/client'
 import { toast } from 'sonner'
-import { AdminLayout } from '@/components/admin/AdminLayout'
 import {
   STATUSES, PRIORITIES, CATEGORIES, STATUS_LABEL, STATUS_COLOR,
   PRIORITY_COLOR, CATEGORY_LABEL, ricePriority, type RequestRow, type Status, type Priority, type Category
 } from '@/lib/requestHelpers'
 import { notifyStatusChange, sendCustomerMessage, sendQuoteEmail, formatCurrency } from '@/lib/customerComms'
-import { Search, X, Trash2, Mail, User as UserIcon, Calendar, Filter, MessageSquare, Send, FileText, Link as LinkIcon, Copy, BellOff, Bell } from 'lucide-react'
+import { Search, X, Trash2, Mail, User as UserIcon, Calendar, Filter, MessageSquare, Send, FileText, Link as LinkIcon, BellOff, Bell } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { formatDistanceToNow } from 'date-fns'
-import { Seo } from '@/components/Seo'
 
 interface Note { id: string; body: string; author_id: string; created_at: string }
 interface Message { id: string; author_type: 'staff'|'customer'|'system'; body: string; created_at: string }
@@ -28,7 +26,7 @@ interface Quote {
 
 type Tab = 'details' | 'messages' | 'quotes' | 'notes'
 
-export default function AdminInbox() {
+export function InboxBody() {
   const [requests, setRequests] = useState<RequestRow[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -53,9 +51,8 @@ export default function AdminInbox() {
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUserId(data.user?.id ?? null))
     fetchAll()
-
     const channel = supabase
-      .channel('requests-inbox')
+      .channel('requests-inbox-body')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'requests' }, () => fetchAll())
       .on('postgres_changes', { event: '*', schema: 'public', table: 'request_messages' }, (payload) => {
         const reqId = (payload.new as any)?.request_id ?? (payload.old as any)?.request_id
@@ -70,8 +67,7 @@ export default function AdminInbox() {
   }, [openId])
 
   async function fetchAll() {
-    const { data, error } = await supabase
-      .from('requests').select('*').order('created_at', { ascending: false })
+    const { data, error } = await supabase.from('requests').select('*').order('created_at', { ascending: false })
     if (error) { toast.error('Failed to load'); return }
     setRequests((data ?? []) as RequestRow[])
     setLoading(false)
@@ -116,7 +112,6 @@ export default function AdminInbox() {
     if (statusFilter !== 'all') list = list.filter(r => r.status === statusFilter)
     if (priorityFilter !== 'all') list = list.filter(r => r.priority === priorityFilter)
     if (categoryFilter !== 'all') list = list.filter(r => r.category === categoryFilter)
-
     if (sortBy === 'priority') {
       const order: Record<Priority, number> = { urgent: 0, high: 1, medium: 2, low: 3 }
       list = [...list].sort((a, b) => order[a.priority] - order[b.priority])
@@ -230,19 +225,15 @@ export default function AdminInbox() {
   }
 
   return (
-    <AdminLayout title="Inbox">
-      <Seo title="Admin Inbox | Invictus Faith Studio" description="Filter, triage, and respond to incoming requests." path="/admin/inbox" noindex />
+    <>
       <div className="space-y-4">
-        {/* Filters */}
         <div className="glass-card rounded-2xl p-4 border border-white/10">
           <div className="flex flex-col lg:flex-row gap-3">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary-foreground/40" />
-              <Input
-                placeholder="Search title, description, name, email..."
+              <Input placeholder="Search title, description, name, email..."
                 value={search} onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 bg-white/5 border-white/10 text-primary-foreground"
-              />
+                className="pl-10 bg-white/5 border-white/10 text-primary-foreground" />
               {search && (
                 <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-primary-foreground/40 hover:text-primary-foreground">
                   <X className="w-4 h-4" />
@@ -283,7 +274,6 @@ export default function AdminInbox() {
           </div>
         </div>
 
-        {/* Bulk action bar */}
         <AnimatePresence>
           {selectedIds.size > 0 && (
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
@@ -307,7 +297,6 @@ export default function AdminInbox() {
           )}
         </AnimatePresence>
 
-        {/* List */}
         {loading ? (
           <div className="text-primary-foreground/60 text-center py-12">Loading...</div>
         ) : filtered.length === 0 ? (
@@ -356,7 +345,6 @@ export default function AdminInbox() {
         )}
       </div>
 
-      {/* Detail drawer */}
       <AnimatePresence>
         {open && (
           <>
@@ -378,7 +366,6 @@ export default function AdminInbox() {
                 </div>
               </div>
 
-              {/* Tabs */}
               <div className="px-6 pt-4 border-b border-white/10 flex gap-1">
                 {([
                   { id: 'details', label: 'Details', icon: FileText },
@@ -434,8 +421,7 @@ export default function AdminInbox() {
 
                     <button
                       onClick={() => updateField(open.id, { notify_on_status_change: !open.notify_on_status_change } as any)}
-                      className="flex items-center gap-2 text-xs text-primary-foreground/70 hover:text-accent"
-                    >
+                      className="flex items-center gap-2 text-xs text-primary-foreground/70 hover:text-accent">
                       {open.notify_on_status_change ? <Bell className="w-3 h-3" /> : <BellOff className="w-3 h-3" />}
                       {open.notify_on_status_change ? 'Customer is notified on status changes' : 'Status notifications off (silent moves)'}
                     </button>
@@ -480,9 +466,7 @@ export default function AdminInbox() {
 
                 {tab === 'messages' && (
                   <div className="space-y-3">
-                    <p className="text-xs text-primary-foreground/50">
-                      Messages are emailed to the customer and visible on their request page.
-                    </p>
+                    <p className="text-xs text-primary-foreground/50">Messages are emailed to the customer and visible on their request page.</p>
                     <div className="space-y-2 max-h-[50vh] overflow-y-auto">
                       {messages.length === 0 ? (
                         <p className="text-primary-foreground/40 text-sm text-center py-6">No messages yet. Start the conversation below.</p>
@@ -595,6 +579,6 @@ export default function AdminInbox() {
           </>
         )}
       </AnimatePresence>
-    </AdminLayout>
+    </>
   )
 }
