@@ -1,11 +1,9 @@
 'use client'
 
 import { useEffect, useState, ReactNode } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '@/integrations/supabase/client'
-import {
-  LayoutDashboard, Inbox, Kanban, LogOut, Shield, ArrowLeft, Menu, X
-} from 'lucide-react'
+import { LogOut, Shield, ArrowLeft } from 'lucide-react'
 import type { User } from '@supabase/supabase-js'
 
 interface Props {
@@ -13,16 +11,9 @@ interface Props {
   title: string
 }
 
-const NAV = [
-  { to: '/admin', label: 'Overview', icon: LayoutDashboard, end: true },
-  { to: '/admin/inbox', label: 'Inbox', icon: Inbox },
-  { to: '/admin/board', label: 'Kanban', icon: Kanban },
-]
-
 export function AdminLayout({ children, title }: Props) {
   const [user, setUser] = useState<User | null>(null)
   const [isStaff, setIsStaff] = useState<boolean | null>(null)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -85,73 +76,38 @@ export function AdminLayout({ children, title }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-primary flex">
-      {/* Sidebar */}
-      <aside className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-primary border-r border-white/10 transform transition-transform lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="p-6 border-b border-white/10">
-          <a href="/" className="text-primary-foreground font-bold text-lg tracking-tight">
-            Owner Console
-          </a>
-          <p className="text-xs text-primary-foreground/40 mt-1 uppercase tracking-widest">
-            Invictus Faith Studio
-          </p>
-        </div>
-        <nav className="p-4 space-y-1">
-          {NAV.map(item => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
-              onClick={() => setSidebarOpen(false)}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
-                  isActive
-                    ? 'bg-accent/10 text-accent border border-accent/30'
-                    : 'text-primary-foreground/70 hover:bg-white/5 hover:text-primary-foreground'
-                }`
-              }
-            >
-              <item.icon className="w-4 h-4" />
-              <span className="text-sm font-medium">{item.label}</span>
-            </NavLink>
-          ))}
-        </nav>
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
-          <p className="text-xs text-primary-foreground/40 truncate mb-2">{user?.email}</p>
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-primary-foreground hover:bg-white/10 transition-colors text-sm"
-          >
-            <LogOut className="w-4 h-4" /> Sign out
-          </button>
-        </div>
-      </aside>
-
-      {sidebarOpen && (
-        <div onClick={() => setSidebarOpen(false)} className="fixed inset-0 bg-black/50 z-30 lg:hidden" />
-      )}
-
-      {/* Main */}
-      <div className="flex-1 min-w-0 flex flex-col">
-        <header className="border-b border-white/10 bg-primary/80 backdrop-blur-xl sticky top-0 z-20">
-          <div className="px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setSidebarOpen(true)}
-                className="lg:hidden p-2 -ml-2 text-primary-foreground/70 hover:text-primary-foreground"
-                aria-label="Open menu"
-              >
-                <Menu className="w-5 h-5" />
-              </button>
-              <h1 className="text-xl font-bold text-primary-foreground">{title}</h1>
-            </div>
-            <a href="/" className="text-primary-foreground/60 hover:text-accent transition-colors text-sm flex items-center gap-2">
-              <ArrowLeft className="w-4 h-4" /> <span className="hidden sm:inline">Back to site</span>
-            </a>
-          </div>
-        </header>
-        <main className="flex-1 p-6 lg:p-8 overflow-x-hidden">{children}</main>
+    <div className="min-h-screen bg-primary relative overflow-hidden">
+      {/* Ambient glow background */}
+      <div className="pointer-events-none absolute inset-0 opacity-40">
+        <div className="absolute -top-40 -left-20 w-[600px] h-[600px] rounded-full bg-accent/10 blur-[120px]" />
+        <div className="absolute top-1/2 -right-40 w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-[120px]" />
       </div>
+
+      <header className="relative border-b border-white/10 bg-primary/70 backdrop-blur-xl sticky top-0 z-30">
+        <div className="px-6 lg:px-8 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-accent to-accent/40 grid place-items-center shadow-[0_0_24px_-4px_hsl(var(--accent))]">
+              <Shield className="w-4 h-4 text-primary" />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-base lg:text-lg font-bold text-primary-foreground truncate leading-tight">{title}</h1>
+              <p className="text-[10px] uppercase tracking-widest text-primary-foreground/40">Invictus Faith Studio</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="hidden md:inline text-xs text-primary-foreground/40 truncate max-w-[200px]">{user?.email}</span>
+            <a href="/" className="text-primary-foreground/60 hover:text-accent transition-colors text-xs flex items-center gap-1 px-3 py-2 rounded-lg border border-white/10 bg-white/5">
+              <ArrowLeft className="w-3 h-3" /> <span className="hidden sm:inline">Site</span>
+            </a>
+            <button onClick={handleLogout}
+              className="text-primary-foreground/60 hover:text-primary-foreground transition-colors text-xs flex items-center gap-1 px-3 py-2 rounded-lg border border-white/10 bg-white/5">
+              <LogOut className="w-3 h-3" /> <span className="hidden sm:inline">Sign out</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main className="relative p-6 lg:p-8 max-w-[1600px] mx-auto">{children}</main>
     </div>
   )
 }
