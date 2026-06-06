@@ -26,7 +26,7 @@ export default function AdminConsole() {
 
       {/* Tab bar */}
       <div className="mb-6 sticky top-[57px] z-10 -mx-6 lg:-mx-8 px-6 lg:px-8 pt-1 pb-3 bg-gradient-to-b from-primary via-primary/95 to-transparent backdrop-blur">
-        <div className="inline-flex p-1 rounded-2xl bg-white/5 border border-white/10 gap-1">
+        <div className="inline-flex p-1 rounded-2xl bg-white/5 border gap-1 border-emerald-400">
           {TABS.map(t => {
             const active = tab === t.id
             return (

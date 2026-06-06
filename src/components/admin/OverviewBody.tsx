@@ -36,7 +36,7 @@ export function OverviewBody() {
   const recent = requests.slice(0, 8)
 
   const stats = [
-    { label: 'Total Requests', value: total, icon: Inbox, color: 'text-primary-foreground', glow: 'from-white/10 to-transparent' },
+    { label: 'Total Requests', value: total, icon: Inbox, color: 'text-primary-foreground text-slate-700', glow: 'from-white/10 to-transparent' },
     { label: 'Open', value: open, icon: Activity, color: 'text-blue-400', glow: 'from-blue-500/20 to-transparent' },
     { label: 'Completed', value: byStatus.completed, icon: CheckCircle2, color: 'text-accent', glow: 'from-accent/20 to-transparent' },
     { label: 'Completion Rate', value: `${completionRate}%`, icon: TrendingUp, color: 'text-accent', glow: 'from-accent/20 to-transparent' },
@@ -68,8 +68,8 @@ export function OverviewBody() {
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
-        <div className="glass-card rounded-2xl p-6 border border-white/10">
-          <h3 className="text-primary-foreground font-semibold mb-4">Status Distribution</h3>
+        <div className="glass-card rounded-2xl p-6 border border-white/10 text-stone-800">
+          <h3 className="text-primary-foreground font-semibold mb-4 text-slate-700">Status Distribution</h3>
           <div className="space-y-3">
             {STATUSES.map(s => {
               const count = byStatus[s]
@@ -89,8 +89,8 @@ export function OverviewBody() {
           </div>
         </div>
 
-        <div className="glass-card rounded-2xl p-6 border border-white/10">
-          <h3 className="text-primary-foreground font-semibold mb-4">Priority Distribution</h3>
+        <div className="glass-card rounded-2xl p-6 border border-white/10 text-stone-800">
+          <h3 className="text-primary-foreground font-semibold mb-4 text-slate-700">Priority Distribution</h3>
           <div className="space-y-3">
             {PRIORITIES.slice().reverse().map(p => {
               const count = byPriority[p]
@@ -111,8 +111,8 @@ export function OverviewBody() {
         </div>
       </div>
 
-      <div className="glass-card rounded-2xl p-6 border border-white/10">
-        <h3 className="text-primary-foreground font-semibold mb-4 flex items-center gap-2">
+      <div className="glass-card rounded-2xl p-6 border border-white/10 text-stone-800">
+        <h3 className="text-primary-foreground font-semibold mb-4 flex items-center gap-2 text-slate-700">
           <Clock className="w-4 h-4" /> Recent Activity
         </h3>
         {recent.length === 0 ? (
@@ -125,7 +125,7 @@ export function OverviewBody() {
             {recent.map(r => (
               <li key={r.id} className="py-3 flex items-center justify-between gap-4">
                 <div className="min-w-0 flex-1">
-                  <p className="text-primary-foreground text-sm font-medium truncate">{r.title}</p>
+                  <p className="text-primary-foreground text-sm font-medium truncate text-neutral-950">{r.title}</p>
                   <p className="text-primary-foreground/40 text-xs">
                     {r.submitter_name} | {formatDistanceToNow(new Date(r.created_at), { addSuffix: true })}
                   </p>

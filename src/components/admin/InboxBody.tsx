@@ -331,7 +331,7 @@ export function InboxBody() {
                             <span className="text-[10px] uppercase px-1.5 py-0.5 rounded border border-accent/30 bg-accent/10 text-accent">RICE {score}</span>
                           )}
                         </div>
-                        <p className="text-primary-foreground font-medium text-sm truncate">{r.title}</p>
+                        <p className="text-primary-foreground text-sm font-medium truncate text-neutral-950">{r.title}</p>
                         <p className="text-primary-foreground/50 text-xs truncate mt-0.5">
                           {r.submitter_name} &middot; {r.submitter_email} &middot; {formatDistanceToNow(new Date(r.created_at), { addSuffix: true })}
                         </p>
