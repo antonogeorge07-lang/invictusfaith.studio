@@ -91,17 +91,17 @@ export function AdminLayout({ children, title }: Props) {
             </div>
             <div className="min-w-0">
               <h1 className="text-base lg:text-lg font-bold text-primary-foreground truncate leading-tight">{title}</h1>
-              <p className="text-[10px] uppercase tracking-widest text-primary-foreground/40">Invictus Faith Studio</p>
+              <p className="text-[10px] uppercase tracking-widest text-primary-foreground/40 text-emerald-300">Invictus Faith Studio</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <span className="hidden md:inline text-xs text-primary-foreground/40 truncate max-w-[200px]">{user?.email}</span>
-            <a href="/" className="text-primary-foreground/60 hover:text-accent transition-colors text-xs flex items-center gap-1 px-3 py-2 rounded-lg border border-white/10 bg-white/5">
-              <ArrowLeft className="w-3 h-3" /> <span className="hidden sm:inline">Site</span>
+            <a href="/" className="text-primary-foreground/60 hover:text-accent transition-colors text-xs flex items-center gap-1 px-3 py-2 rounded-lg border border-white/10 bg-emerald-400">
+              <ArrowLeft className="w-3 h-3" /> <span className="hidden sm:inline bg-emerald-400">Site</span>
             </a>
             <button onClick={handleLogout}
-              className="text-primary-foreground/60 hover:text-primary-foreground transition-colors text-xs flex items-center gap-1 px-3 py-2 rounded-lg border border-white/10 bg-white/5">
-              <LogOut className="w-3 h-3" /> <span className="hidden sm:inline">Sign out</span>
+              className="text-primary-foreground/60 hover:text-primary-foreground transition-colors text-xs flex items-center gap-1 px-3 py-2 rounded-lg border border-white/10 bg-emerald-400">
+              <LogOut className="w-3 h-3" /> <span className="hidden sm:inline bg-emerald-400">Sign out</span>
             </button>
           </div>
         </div>
