@@ -6,15 +6,17 @@ import { AdminLayout } from '@/components/admin/AdminLayout'
 import { OverviewBody } from '@/components/admin/OverviewBody'
 import { InboxBody } from '@/components/admin/InboxBody'
 import { BoardBody } from '@/components/admin/BoardBody'
+import { SamplesBody } from '@/components/admin/SamplesBody'
 import { Seo } from '@/components/Seo'
-import { LayoutDashboard, Inbox, Kanban } from 'lucide-react'
+import { LayoutDashboard, Inbox, Kanban, Sparkles } from 'lucide-react'
 
-type Tab = 'overview' | 'inbox' | 'board'
+type Tab = 'overview' | 'inbox' | 'board' | 'samples'
 
 const TABS: { id: Tab; label: string; icon: typeof LayoutDashboard }[] = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
   { id: 'inbox', label: 'Inbox', icon: Inbox },
   { id: 'board', label: 'Kanban', icon: Kanban },
+  { id: 'samples', label: 'Showcase', icon: Sparkles },
 ]
 
 export default function AdminConsole() {
