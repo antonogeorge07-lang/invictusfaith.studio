@@ -341,6 +341,48 @@ export type Database = {
         }
         Relationships: []
       }
+      studio_samples: {
+        Row: {
+          category: Database["public"]["Enums"]["studio_sample_category"]
+          created_at: string
+          created_by: string | null
+          id: string
+          image_url: string | null
+          name: string
+          position: number
+          published: boolean
+          tag: string | null
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["studio_sample_category"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          position?: number
+          published?: boolean
+          tag?: string | null
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["studio_sample_category"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          position?: number
+          published?: boolean
+          tag?: string | null
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
       suppressed_emails: {
         Row: {
           created_at: string
@@ -458,6 +500,7 @@ export type Database = {
         | "in_progress"
         | "completed"
         | "rejected"
+      studio_sample_category: "design" | "platform" | "launch"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -597,6 +640,7 @@ export const Constants = {
         "completed",
         "rejected",
       ],
+      studio_sample_category: ["design", "platform", "launch"],
     },
   },
 } as const
