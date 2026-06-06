@@ -67,6 +67,7 @@ export default function AdminConsole() {
           {tab === 'overview' && <OverviewBody />}
           {tab === 'inbox' && <InboxBody />}
           {tab === 'board' && <BoardBody />}
+          {tab === 'samples' && <SamplesBody />}
         </motion.div>
       </AnimatePresence>
     </AdminLayout>
