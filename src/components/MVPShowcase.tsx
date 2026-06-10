@@ -31,48 +31,12 @@ export function MVPShowcase() {
   const { t } = useLanguage()
 
   const mvps = [
-    {
-      nameKey: 'mvp.polylinq.name',
-      descKey: 'mvp.polylinq.desc',
-      statusKey: 'mvp.polylinq.status',
-      icon: Globe,
-      url: 'https://poly-linq.com/',
-    },
-    {
-      nameKey: 'mvp.mentorverse.name',
-      descKey: 'mvp.mentorverse.desc',
-      statusKey: 'mvp.mentorverse.status',
-      icon: Users,
-      url: 'https://invictus-faith-studio.streamlit.app/',
-    },
-    {
-      nameKey: 'mvp.saai.name',
-      descKey: 'mvp.saai.desc',
-      statusKey: 'mvp.saai.status',
-      icon: Brain,
-      url: 'https://spark-agile.com/',
-    },
-    {
-      nameKey: 'mvp.faithcommerce.name',
-      descKey: 'mvp.faithcommerce.desc',
-      statusKey: 'mvp.faithcommerce.status',
-      icon: ShoppingBag,
-      url: '',
-    },
-    {
-      nameKey: 'mvp.invictusnetwork.name',
-      descKey: 'mvp.invictusnetwork.desc',
-      statusKey: 'mvp.invictusnetwork.status',
-      icon: Network,
-      url: '',
-    },
-    {
-      nameKey: 'mvp.more.name',
-      descKey: 'mvp.more.desc',
-      statusKey: 'mvp.more.status',
-      icon: Sparkles,
-      url: '#contact',
-    },
+    { nameKey: 'mvp.polylinq.name', descKey: 'mvp.polylinq.desc', statusKey: 'mvp.polylinq.status', icon: Globe, url: '#contact' },
+    { nameKey: 'mvp.mentorverse.name', descKey: 'mvp.mentorverse.desc', statusKey: 'mvp.mentorverse.status', icon: Users, url: '#contact' },
+    { nameKey: 'mvp.saai.name', descKey: 'mvp.saai.desc', statusKey: 'mvp.saai.status', icon: Brain, url: '#contact' },
+    { nameKey: 'mvp.faithcommerce.name', descKey: 'mvp.faithcommerce.desc', statusKey: 'mvp.faithcommerce.status', icon: ShoppingBag, url: '#contact' },
+    { nameKey: 'mvp.invictusnetwork.name', descKey: 'mvp.invictusnetwork.desc', statusKey: 'mvp.invictusnetwork.status', icon: Network, url: '#contact' },
+    { nameKey: 'mvp.more.name', descKey: 'mvp.more.desc', statusKey: 'mvp.more.status', icon: Sparkles, url: '#contact' },
   ]
 
   return (
