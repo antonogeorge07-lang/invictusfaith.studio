@@ -182,10 +182,10 @@ export default function Business() {
               className="flex flex-col sm:flex-row items-center justify-center gap-4"
             >
               <button
-                onClick={() => document.querySelector('#packs')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => document.querySelector('#intake')?.scrollIntoView({ behavior: 'smooth' })}
                 className="btn-electric px-8 py-4 rounded-2xl text-lg font-semibold inline-flex items-center gap-2"
               >
-                {t('biz.ctaSee')} <ArrowRight className="w-5 h-5" />
+                {t('biz.ctaStart')} <ArrowRight className="w-5 h-5" />
               </button>
               <button
                 onClick={() => openIntake('growth')}
