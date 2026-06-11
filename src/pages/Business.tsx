@@ -6,6 +6,7 @@ import { Check, ArrowRight, Zap, Globe, Bot, TrendingUp, CheckCircle2, ExternalL
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { Navbar } from '@/components/Navbar'
+import { LogoBar } from '@/components/LogoBar'
 import { Seo } from '@/components/Seo'
 import { supabase } from '@/integrations/supabase/client'
 import { useLanguage } from '@/i18n/LanguageContext'
@@ -216,8 +217,11 @@ export default function Business() {
         </div>
       </section>
 
+      <LogoBar label="Trusted by founders and small businesses we have shipped for" />
+
       {/* PACKAGES */}
       <section id="packs" className="py-24 bg-background">
+
         <div className="container mx-auto px-6">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">{t('biz.packsTitle')}</h2>
