@@ -17,7 +17,6 @@ type Persona = {
   highlight: string
   subtext: string
   pains: string[]
-  recommended: { name: string; price: string; tagline: string }
 }
 
 const PERSONAS: Record<string, Persona> = {
