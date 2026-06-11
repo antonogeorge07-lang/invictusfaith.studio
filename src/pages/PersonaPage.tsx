@@ -17,7 +17,6 @@ type Persona = {
   highlight: string
   subtext: string
   pains: string[]
-  recommended: { name: string; price: string; tagline: string }
 }
 
 const PERSONAS: Record<string, Persona> = {
@@ -32,7 +31,6 @@ const PERSONAS: Record<string, Persona> = {
       'Need investor-ready proof, fast',
       'Cannot afford a 6-month build cycle',
     ],
-    recommended: { name: 'Pro', price: '€300', tagline: 'Full MVP with auth, payments, and analytics' },
   },
   'small-business': {
     slug: 'small-business',
@@ -45,7 +43,6 @@ const PERSONAS: Record<string, Persona> = {
       'Existing site is slow on mobile',
       'No time to manage agencies',
     ],
-    recommended: { name: 'Growth', price: '€189', tagline: 'Booking, payments, multi-page' },
   },
   creators: {
     slug: 'creators',
@@ -58,7 +55,6 @@ const PERSONAS: Record<string, Persona> = {
       'Email list lives in Notion',
       'No way to sell products directly',
     ],
-    recommended: { name: 'Growth', price: '€189', tagline: 'Portfolio + newsletter + light commerce' },
   },
 }
 
@@ -138,14 +134,10 @@ export default function PersonaPage() {
               </ul>
             </div>
             <div className="glass-card rounded-3xl p-8 elevated-shadow">
-              <p className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">Recommended package</p>
-              <div className="flex items-baseline gap-3 mb-3">
-                <h3 className="text-4xl font-bold">{data.recommended.name}</h3>
-                <span className="text-2xl font-bold text-muted-foreground">{data.recommended.price}</span>
-              </div>
-              <p className="text-muted-foreground mb-6">{data.recommended.tagline}</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-accent font-semibold mb-3">How we help</p>
+              <p className="text-muted-foreground mb-6">Every project starts with a 20-minute call. We scope your needs, then ship in 7 days.</p>
               <a href="#contact" className="btn-electric inline-flex items-center gap-2 px-6 py-3 rounded-2xl font-semibold">
-                Get a quote <ArrowRight className="w-4 h-4" />
+                Start a project <ArrowRight className="w-4 h-4" />
               </a>
             </div>
           </div>
