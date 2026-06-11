@@ -58,27 +58,21 @@ export function Navbar() {
           </a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8 text-green-400 font-normal">
+          <div className="hidden lg:flex items-center gap-6 font-normal">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={(e) => { e.preventDefault(); scrollToSection(link.href); }}
-                className="text-sm font-medium text-muted-foreground hover:text-accent transition-colors text-emerald-500"
+                className="text-sm font-medium text-emerald-500 hover:text-accent transition-colors whitespace-nowrap"
               >
                 {link.label}
               </a>
             ))}
-            <a
-              href="/studio"
-              className="text-sm font-medium text-muted-foreground hover:text-accent transition-colors text-emerald-500"
-            >
-              Studio
-            </a>
             <LanguageSwitcher />
             <button
               onClick={() => scrollToSection('#contact')}
-              className="btn-electric px-6 py-2.5 rounded-2xl text-sm font-semibold"
+              className="btn-electric px-6 py-2.5 rounded-2xl text-sm font-semibold whitespace-nowrap"
             >
               {t('nav.startProject')}
             </button>
@@ -87,7 +81,7 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-foreground"
+            className="lg:hidden p-2 text-foreground"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -101,7 +95,7 @@ export function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-40 bg-primary pt-24 md:hidden"
+            className="fixed inset-0 z-40 bg-primary pt-24 lg:hidden"
           >
             <div className="container mx-auto px-6 flex flex-col gap-6">
               {navLinks.map((link) => (
