@@ -31,7 +31,6 @@ const PERSONAS: Record<string, Persona> = {
       'Need investor-ready proof, fast',
       'Cannot afford a 6-month build cycle',
     ],
-    recommended: { name: 'Pro', price: '€300', tagline: 'Full MVP with auth, payments, and analytics' },
   },
   'small-business': {
     slug: 'small-business',
