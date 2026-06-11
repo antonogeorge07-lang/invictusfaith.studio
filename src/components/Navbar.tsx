@@ -26,7 +26,6 @@ export function Navbar() {
       ]
     : [
         { href: '#top', label: t('nav.home') },
-        { href: '#packs', label: 'Packages' },
         { href: '/insights', label: 'Insights', route: true },
         { href: '/studio', label: 'Studio', route: true },
         { href: '#intake', label: t('nav.contact') },

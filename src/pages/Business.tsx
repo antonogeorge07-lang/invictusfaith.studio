@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Check, ArrowRight, Zap, Globe, Bot, TrendingUp, CheckCircle2, ExternalLink, Copy } from 'lucide-react'
+import { ArrowRight, Zap, Globe, Bot, TrendingUp, CheckCircle2, ExternalLink, Copy } from 'lucide-react'
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { Navbar } from '@/components/Navbar'
@@ -18,64 +18,24 @@ const intakeSchema = z.object({
   message: z.string().trim().min(10).max(2000),
 })
 
-type PackKey = 'starter' | 'growth' | 'pro'
-
-const PLAN_FEATURES: Record<PackKey, string[]> = {
-  starter: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'],
-  growth: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'],
-  pro: ['f1', 'f2', 'f3', 'f4', 'f5', 'f6'],
-}
-
 export default function Business() {
   const { t } = useLanguage()
-  const [selected, setSelected] = useState<PackKey | null>(null)
   const [form, setForm] = useState({ name: '', email: '', business: '', message: '' })
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState<{ portalUrl: string; email: string } | null>(null)
 
-  const PACKS: Record<PackKey, { title: string; price: string; cadence: string; tagline: string; features: string[]; cta: string; popular?: boolean }> = {
-    starter: {
-      title: t('biz.plan.starter.title'),
-      price: '€89',
-      cadence: t('biz.plan.cadence'),
-      tagline: t('biz.plan.starter.tagline'),
-      features: PLAN_FEATURES.starter.map((feature) => t(`biz.plan.starter.${feature}`)),
-      cta: t('biz.plan.starter.cta'),
-    },
-    growth: {
-      title: t('biz.plan.growth.title'),
-      price: '€189',
-      cadence: t('biz.plan.cadence'),
-      tagline: t('biz.plan.growth.tagline'),
-      features: PLAN_FEATURES.growth.map((feature) => t(`biz.plan.growth.${feature}`)),
-      cta: t('biz.plan.growth.cta'),
-      popular: true,
-    },
-    pro: {
-      title: t('biz.plan.pro.title'),
-      price: '€300',
-      cadence: t('biz.plan.cadence'),
-      tagline: t('biz.plan.pro.tagline'),
-      features: PLAN_FEATURES.pro.map((feature) => t(`biz.plan.pro.${feature}`)),
-      cta: t('biz.plan.pro.cta'),
-    },
-  }
-
-  const openIntake = (pack: PackKey) => {
-    setSelected(pack)
+  const openIntake = () => {
     setSuccess(null)
     setTimeout(() => document.querySelector('#intake')?.scrollIntoView({ behavior: 'smooth' }), 50)
   }
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!selected) return
     setSubmitting(true)
     try {
       const v = intakeSchema.parse(form)
-      const pack = PACKS[selected]
-      const title = t('biz.requestTitle', { pack: pack.title, business: v.business })
-      const description = t('biz.requestBody', { business: v.business, pack: pack.title, price: pack.price, cadence: pack.cadence, message: v.message })
+      const title = `Quote request from ${v.business}`
+      const description = `Business: ${v.business}\n\n${v.message}`
 
       const { data: inserted, error } = await supabase
         .from('requests')
@@ -85,7 +45,7 @@ export default function Business() {
           title,
           description,
           category: 'feature',
-          priority: selected === 'pro' ? 'high' : selected === 'growth' ? 'medium' : 'low',
+          priority: 'medium',
         })
         .select('id, public_token')
         .single()
@@ -182,16 +142,16 @@ export default function Business() {
               className="flex flex-col sm:flex-row items-center justify-center gap-4"
             >
               <button
-                onClick={() => document.querySelector('#packs')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={openIntake}
                 className="btn-electric px-8 py-4 rounded-2xl text-lg font-semibold inline-flex items-center gap-2"
               >
-                {t('biz.ctaSee')} <ArrowRight className="w-5 h-5" />
+                {t('biz.ctaQuote')} <ArrowRight className="w-5 h-5" />
               </button>
               <button
-                onClick={() => openIntake('growth')}
+                onClick={() => document.querySelector('#intake')?.scrollIntoView({ behavior: 'smooth' })}
                 className="px-8 py-4 rounded-2xl text-lg font-semibold border-2 border-primary text-foreground hover:bg-primary hover:text-primary-foreground transition-all"
               >
-                {t('biz.ctaQuote')}
+                {t('nav.contact')}
               </button>
             </motion.div>
 
@@ -219,75 +179,6 @@ export default function Business() {
 
       <LogoBar label="Trusted by founders and small businesses we have shipped for" />
 
-      {/* PACKAGES */}
-      <section id="packs" className="py-24 bg-background">
-
-        <div className="container mx-auto px-6">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">{t('biz.packsTitle')}</h2>
-            <p className="text-muted-foreground text-lg">{t('biz.packsSub')}</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {(Object.keys(PACKS) as PackKey[]).map((key) => {
-              const p = PACKS[key]
-              return (
-                <motion.div
-                  key={key}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.5 }}
-                  className={`relative rounded-3xl border p-8 flex flex-col ${
-                    p.popular
-                      ? 'border-accent bg-accent/[0.04] shadow-[0_0_60px_-20px_hsl(var(--accent)/0.5)]'
-                      : 'border-border bg-card'
-                  }`}
-                >
-                  {p.popular && (
-                    <span className="absolute -top-3 right-6 px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-bold uppercase tracking-wide">
-                      {t('biz.popular')}
-                    </span>
-                  )}
-                  <h3 className="text-2xl font-bold mb-2">{p.title}</h3>
-                  <p className="text-muted-foreground mb-6">{p.tagline}</p>
-                  <div className="flex items-baseline gap-2 mb-8">
-                    <span className="text-5xl font-extrabold text-foreground">{p.price}</span>
-                    <span className="text-muted-foreground">{p.cadence}</span>
-                  </div>
-                  <ul className="space-y-3 mb-8 flex-1">
-                    {p.features.map((f) => (
-                      <li key={f} className="flex items-start gap-3 text-sm text-foreground/80">
-                        <Check className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                        <span>{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <button
-                    onClick={() => openIntake(key)}
-                    className={`w-full py-4 rounded-2xl font-semibold text-base transition-all ${
-                      p.popular
-                        ? 'btn-electric'
-                        : 'border-2 border-primary text-foreground hover:bg-primary hover:text-primary-foreground'
-                    }`}
-                  >
-                    {p.cta}
-                  </button>
-                </motion.div>
-              )
-            })}
-          </div>
-
-          <p className="text-center text-sm text-muted-foreground mt-10">
-            {t('biz.notSurePre')}{' '}
-            <button onClick={() => openIntake('growth')} className="text-accent underline underline-offset-4 hover:opacity-80">
-              {t('biz.notSureLink')}
-            </button>{' '}
-            {t('biz.notSurePost')}
-          </p>
-        </div>
-      </section>
-
       {/* INTAKE */}
       <section id="intake" className="py-24 bg-primary">
         <div className="container mx-auto px-6">
@@ -299,11 +190,6 @@ export default function Business() {
               <p className="text-primary-foreground/80 text-lg font-light mb-8">
                 {t('biz.intakeDesc')}
               </p>
-              {selected && (
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/30 text-sm text-accent font-medium">
-                  {t('biz.selected', { pack: PACKS[selected].title })}
-                </div>
-              )}
             </div>
 
             {success ? (
@@ -338,20 +224,6 @@ export default function Business() {
               </motion.div>
             ) : (
               <form onSubmit={onSubmit} className="space-y-4">
-                {!selected && (
-                  <div className="grid grid-cols-3 gap-2 mb-2">
-                    {(Object.keys(PACKS) as PackKey[]).map((k) => (
-                      <button
-                        type="button"
-                        key={k}
-                        onClick={() => setSelected(k)}
-                        className="px-4 py-3 rounded-2xl border border-white/15 text-primary-foreground/80 hover:border-accent hover:text-accent text-sm font-medium transition-colors"
-                      >
-                        {PACKS[k].title}
-                      </button>
-                    ))}
-                  </div>
-                )}
                 <input
                   type="text"
                   value={form.name}
@@ -387,10 +259,10 @@ export default function Business() {
                 />
                 <button
                   type="submit"
-                  disabled={submitting || !selected}
+                  disabled={submitting}
                   className="w-full py-4 btn-electric rounded-2xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {submitting ? t('biz.sending') : selected ? t('biz.submitWith', { pack: PACKS[selected].title }) : t('biz.submitPick')}
+                  {submitting ? t('biz.sending') : t('contact.send')}
                 </button>
                 <p className="text-xs text-primary-foreground/40 text-center">
                   {t('biz.footnote')}
