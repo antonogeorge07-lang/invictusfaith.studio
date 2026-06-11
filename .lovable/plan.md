@@ -1,77 +1,64 @@
+# HiBob adaptation: full push
 
-# Phase 2 — Customer Communication, Quotes & Portal
+Shipping all four slices in one push. Heads-up: this is a large change touching design tokens, routing, two new admin sections, and two new public content systems. I'll keep each slice self-contained so anything can be reverted independently.
 
-Build a complete request-handling workflow: reply to customers from the admin, auto-notify them on status changes, send simple quotes they can accept or decline, and give every request a public tracking page.
+## 1. Visual polish + proof bar
 
-## What you'll get
+- Editorial H1 scale: bump desktop `h1` to clamp(3rem, 7vw, 7.5rem), tighter tracking, single accent color discipline (drop stray emerald-300/400/500 mixes, use `--accent` token only).
+- Hover micro-interactions: 2px lift + underline-draw on nav and card links via existing Framer Motion.
+- Section rhythm: alternate `bg-background` / `bg-secondary` between Vision, MVPs, Samples, Pillars so the page stops feeling uniformly dark.
+- Proof bar: new `LogoBar.tsx` rendered under `Hero`, pulls `studio_samples` rows where `published = true`, shows favicon + name in a marquee. Mid-page repeat above Contact.
 
-### 1. Reply thread (admin ↔ customer via email)
-- New "Messages" tab inside the request drawer at `/admin/inbox`
-- Owner / Admin / Designer can write a message → customer receives it by email from `noreply@invictusfaith.studio`
-- Customer's email replies are captured (via inbound parsing or a "Reply" button in the email that opens their portal page) and shown in the same thread
-- Internal "Notes" stay separate from customer-facing "Messages"
+## 2. Persona landing pages
 
-### 2. Status update emails
-- Whenever a request is moved on the Kanban (`new` → `triaged` → `in_progress` → `waiting` → `done`), the customer automatically gets a branded email
-- Each status has its own friendly copy ("Your idea is now in progress" etc.)
-- Toggle in the drawer: "Notify customer on status changes" (on by default) so internal-only moves don't email
+Routes: `/for/founders`, `/for/small-business`, `/for/creators`.
 
-### 3. Simple quotes with Accept / Decline
-- "Quotes" tab in the request drawer
-- Quote = title + total amount (EUR by default) + optional notes
-- "Send quote" → customer gets a styled email with two buttons: **Accept** / **Decline** (each is a unique signed link)
-- Customer click updates quote status and posts a system message in the thread
-- Quote status badges: Draft, Sent, Accepted, Declined, Expired
+- Single `PersonaPage.tsx` component takes a persona config (headline, subtext, pain points, recommended package, testimonial slot).
+- Reuses Hero, Pillars, MVPShowcase, Contact with persona-specific copy injected.
+- Added to navbar under a new "For" dropdown.
 
-### 4. Public customer portal (no login)
-- Every request gets a unique unguessable token at creation
-- Public page at `/r/<token>` shows: status timeline, full message thread, quote(s), reply box
-- Link is included in the original confirmation email and every status-update email
-- Read + write scoped to that single request via the token (no auth needed for the customer)
+## 3. Insights blog CMS
 
-## Permissions
-All three roles (Owner, Admin, Designer) can send messages and quotes, per your selection.
+Database (migration):
+- `posts` table: slug (unique), title, excerpt, body_md, cover_url, status (draft/published), author_id, published_at, tags[].
+- RLS: anyone reads `published`; staff (`is_staff`) full CRUD.
+- GRANT select to anon for published reads, full CRUD to authenticated + service_role.
 
----
+Frontend:
+- `/insights` index page (grid of published posts).
+- `/insights/:slug` detail page (markdown render via `react-markdown` already-or-add).
+- Admin: new `InsightsBody.tsx` tab in `/admin` with list + create/edit form (title, slug, body markdown, cover upload to a new `insights` storage bucket, publish toggle).
+- SEO: per-post `<Seo>` + JSON-LD Article schema.
 
-## Technical Section (for reference)
+## 4. Page-blocks CMS
 
-### Database changes (one migration)
-- `requests`: add `public_token uuid unique`, `notify_on_status_change boolean default true`
-- New table `request_messages` (id, request_id, author_type ['staff'|'customer'|'system'], author_id nullable, body, created_at)
-- New table `quotes` (id, request_id, title, total_cents int, currency text default 'EUR', notes, status enum ['draft','sent','accepted','declined','expired'], accept_token uuid, decline_token uuid, sent_at, responded_at, created_by, created_at, updated_at)
-- Trigger on `requests` UPDATE OF status → enqueue status-change email if `notify_on_status_change`
-- Backfill `public_token` for existing rows
-- RLS:
-  - `request_messages`: staff full access; anon SELECT/INSERT only via the portal edge function (server-side token check)
-  - `quotes`: staff full access; anon read via portal edge function
-- Realtime on `request_messages` and `quotes` for live admin updates
+Database (migration):
+- `pages` table: slug (unique), title, status, seo_title, seo_description.
+- `page_blocks` table: page_id FK, sort_order, block_type (hero|logo_bar|feature_split|testimonial|stats_row|cta|markdown), props jsonb.
+- RLS: anyone reads blocks of published pages; staff full CRUD.
 
-### Email infrastructure
-- Already have email domain `notify.invictusfaith.studio` + auth-email-hook + queue
-- Need to call `setup_email_infra` (idempotent) then `scaffold_transactional_email`
-- Templates created (React Email, branded with #00FFAB / Poppins, white body):
-  - `request-received` (replaces current send-contact-notification confirmation)
-  - `request-status-update` (dynamic status copy)
-  - `request-message` (new message from studio)
-  - `quote-sent` (with Accept/Decline buttons)
-  - `quote-response-confirmation` (after customer clicks)
+Frontend:
+- `<DynamicPage>` route at `/p/:slug` that fetches page + blocks and renders a `BlockRenderer` switching on `block_type`.
+- Block components live in `src/components/blocks/` (one file per type, ~7 files), each reads `props` and renders using existing design tokens.
+- Admin: new `PagesBody.tsx` tab with page list, block list per page (drag-reorder with existing dnd from BoardBody), and a props editor (simple JSON form per block type for v1).
 
-### Edge functions
-- `send-transactional-email` (scaffolded, used everywhere)
-- `request-portal` — public GET/POST for `/r/<token>` (fetch thread + quotes, post customer message)
-- `quote-respond` — public GET that handles accept/decline link clicks, redirects to portal page
-- DB trigger → enqueues status-update email when status changes
+## Order of operations
 
-### Frontend
-- `src/pages/admin/Inbox.tsx` drawer: add tabs (Details / Messages / Quotes / Notes), message composer, quote builder, "Send" buttons
-- `src/pages/admin/Board.tsx`: status change uses existing update path (trigger handles email)
-- New `src/pages/RequestPortal.tsx` at route `/r/:token` — public, branded, mobile-first
-- Update `src/components/Contact.tsx` confirmation flow to use new template
-- Add portal link to all customer-facing emails
+1. Migration: `posts`, `pages`, `page_blocks` + storage bucket `insights` in one approval.
+2. After approval lands and types regenerate: code for all four slices in parallel writes.
+3. Update navbar, Console tabs, App routes, memory index.
 
-### Out of scope (future phases)
-- PDF quote generation
-- Itemized line items / tax / multi-currency
-- Inbound email parsing (replies in this phase happen via the portal "Reply" button in the email; full inbound parsing is a later add)
-- Stripe / payment collection on accepted quotes
+## Technical notes
+
+- New deps: `react-markdown`, `remark-gfm` for blog rendering.
+- No edge functions needed; everything is client + RLS.
+- No em-dashes; semantic tokens only; `translate="no"` already on root.
+- The page-blocks admin in v1 uses a raw-JSON props editor per block to keep this single-push scope sane. Per-block form UIs can come later.
+
+## Risks
+
+- Big surface area: ~15 new files + 1 migration. If anything breaks the build, the whole push is blocked until fixed.
+- Block-type schemas are frozen at v1; changing them later means data migration.
+- The visual polish (alternating section backgrounds, H1 scale) is opinionated and may not match your taste on first try.
+
+Approve and I'll start with the migration, then ship the rest in parallel writes.

@@ -7,16 +7,20 @@ import { OverviewBody } from '@/components/admin/OverviewBody'
 import { InboxBody } from '@/components/admin/InboxBody'
 import { BoardBody } from '@/components/admin/BoardBody'
 import { SamplesBody } from '@/components/admin/SamplesBody'
+import { InsightsBody } from '@/components/admin/InsightsBody'
+import { PagesBody } from '@/components/admin/PagesBody'
 import { Seo } from '@/components/Seo'
-import { LayoutDashboard, Inbox, Kanban, Sparkles } from 'lucide-react'
+import { LayoutDashboard, Inbox, Kanban, Sparkles, FileText, Layers } from 'lucide-react'
 
-type Tab = 'overview' | 'inbox' | 'board' | 'samples'
+type Tab = 'overview' | 'inbox' | 'board' | 'samples' | 'insights' | 'pages'
 
 const TABS: { id: Tab; label: string; icon: typeof LayoutDashboard }[] = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
   { id: 'inbox', label: 'Inbox', icon: Inbox },
   { id: 'board', label: 'Kanban', icon: Kanban },
   { id: 'samples', label: 'Showcase', icon: Sparkles },
+  { id: 'insights', label: 'Insights', icon: FileText },
+  { id: 'pages', label: 'Pages', icon: Layers },
 ]
 
 export default function AdminConsole() {
@@ -68,6 +72,8 @@ export default function AdminConsole() {
           {tab === 'inbox' && <InboxBody />}
           {tab === 'board' && <BoardBody />}
           {tab === 'samples' && <SamplesBody />}
+          {tab === 'insights' && <InsightsBody />}
+          {tab === 'pages' && <PagesBody />}
         </motion.div>
       </AnimatePresence>
     </AdminLayout>
