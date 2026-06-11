@@ -28,41 +28,11 @@ const PLAN_FEATURES: Record<PackKey, string[]> = {
 
 export default function Business() {
   const { t } = useLanguage()
-  const [selected, setSelected] = useState<PackKey | null>(null)
   const [form, setForm] = useState({ name: '', email: '', business: '', message: '' })
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState<{ portalUrl: string; email: string } | null>(null)
 
-  const PACKS: Record<PackKey, { title: string; price: string; cadence: string; tagline: string; features: string[]; cta: string; popular?: boolean }> = {
-    starter: {
-      title: t('biz.plan.starter.title'),
-      price: '€89',
-      cadence: t('biz.plan.cadence'),
-      tagline: t('biz.plan.starter.tagline'),
-      features: PLAN_FEATURES.starter.map((feature) => t(`biz.plan.starter.${feature}`)),
-      cta: t('biz.plan.starter.cta'),
-    },
-    growth: {
-      title: t('biz.plan.growth.title'),
-      price: '€189',
-      cadence: t('biz.plan.cadence'),
-      tagline: t('biz.plan.growth.tagline'),
-      features: PLAN_FEATURES.growth.map((feature) => t(`biz.plan.growth.${feature}`)),
-      cta: t('biz.plan.growth.cta'),
-      popular: true,
-    },
-    pro: {
-      title: t('biz.plan.pro.title'),
-      price: '€300',
-      cadence: t('biz.plan.cadence'),
-      tagline: t('biz.plan.pro.tagline'),
-      features: PLAN_FEATURES.pro.map((feature) => t(`biz.plan.pro.${feature}`)),
-      cta: t('biz.plan.pro.cta'),
-    },
-  }
-
-  const openIntake = (pack: PackKey) => {
-    setSelected(pack)
+  const openIntake = () => {
     setSuccess(null)
     setTimeout(() => document.querySelector('#intake')?.scrollIntoView({ behavior: 'smooth' }), 50)
   }
