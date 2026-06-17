@@ -38,7 +38,7 @@ export function Contact() {
     try {
       const v = contactSchema.parse(formData)
 
-      const { data: inserted, error } = await supabase
+      const { data: rows, error } = await (supabase as any)
         .rpc('create_request', {
           _name: v.name,
           _email: v.email,
@@ -47,7 +47,8 @@ export function Contact() {
           _category: 'support',
           _priority: 'medium',
         })
-        .maybeSingle()
+
+      const inserted = Array.isArray(rows) ? rows[0] : rows
 
       if (error) throw error
 
