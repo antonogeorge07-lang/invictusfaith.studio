@@ -39,17 +39,15 @@ export function Contact() {
       const v = contactSchema.parse(formData)
 
       const { data: inserted, error } = await supabase
-        .from('requests')
-        .insert({
-          submitter_name: v.name,
-          submitter_email: v.email,
-          title: v.title,
-          description: v.message,
-          category: 'support',
-          priority: 'medium',
+        .rpc('create_request', {
+          _name: v.name,
+          _email: v.email,
+          _title: v.title,
+          _description: v.message,
+          _category: 'support',
+          _priority: 'medium',
         })
-        .select('id, public_token')
-        .single()
+        .maybeSingle()
 
       if (error) throw error
 
