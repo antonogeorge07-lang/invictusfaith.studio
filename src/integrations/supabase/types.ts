@@ -570,6 +570,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_request: {
+        Args: {
+          _category?: string
+          _description: string
+          _email: string
+          _name: string
+          _priority?: string
+          _title: string
+        }
+        Returns: {
+          id: string
+          public_token: string
+        }[]
+      }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
