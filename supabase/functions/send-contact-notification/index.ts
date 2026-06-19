@@ -147,7 +147,13 @@ Deno.serve(async (req) => {
 
     if (error) {
       console.error("Resend error:", error);
-      throw error;
+      return new Response(
+        JSON.stringify({ success: true, warning: "Notification email skipped" }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 202,
+        }
+      );
     }
 
     console.log("Email sent successfully:", data);

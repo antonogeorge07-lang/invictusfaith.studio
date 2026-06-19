@@ -35,7 +35,7 @@ export default function Business() {
     setSubmitting(true)
     try {
       const v = intakeSchema.parse(form)
-      const title = `Quote request from ${v.business}`
+      const title = `Free roadmap request from ${v.business}`
       const description = `Business: ${v.business}\n\n${v.message}`
 
       const inserted = await createRequest({
