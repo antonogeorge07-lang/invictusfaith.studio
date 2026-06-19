@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { useLanguage } from '@/i18n/LanguageContext'
 import { z } from 'zod'
 import { CheckCircle2, Copy, ExternalLink } from 'lucide-react'
+import { createRequest } from '@/lib/createRequest'
 
 const contactSchema = z.object({
   name: z.string()
@@ -38,19 +39,14 @@ export function Contact() {
     try {
       const v = contactSchema.parse(formData)
 
-      const { data: rows, error } = await (supabase as any)
-        .rpc('create_request', {
-          _name: v.name,
-          _email: v.email,
-          _title: v.title,
-          _description: v.message,
-          _category: 'support',
-          _priority: 'medium',
-        })
-
-      const inserted = Array.isArray(rows) ? rows[0] : rows
-
-      if (error) throw error
+      const inserted = await createRequest({
+        name: v.name,
+        email: v.email,
+        title: v.title,
+        description: v.message,
+        category: 'support',
+        priority: 'medium',
+      })
 
       if (inserted) {
         // AI classification (fire-and-forget)

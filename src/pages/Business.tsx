@@ -10,6 +10,7 @@ import { LogoBar } from '@/components/LogoBar'
 import { Seo } from '@/components/Seo'
 import { supabase } from '@/integrations/supabase/client'
 import { useLanguage } from '@/i18n/LanguageContext'
+import { createRequest } from '@/lib/createRequest'
 
 const intakeSchema = z.object({
   name: z.string().trim().min(1).max(100),
@@ -37,21 +38,14 @@ export default function Business() {
       const title = `Quote request from ${v.business}`
       const description = `Business: ${v.business}\n\n${v.message}`
 
-      const { data: inserted, error } = await supabase
-        .from('requests')
-        .insert({
-          submitter_name: v.name,
-          submitter_email: v.email,
-          title,
-          description,
-          category: 'feature',
-          priority: 'medium',
-        })
-        .select('id, public_token')
-        .single()
-
-      if (error) throw error
-      if (!inserted) throw new Error('No record returned')
+      const inserted = await createRequest({
+        name: v.name,
+        email: v.email,
+        title,
+        description,
+        category: 'feature',
+        priority: 'medium',
+      })
 
       supabase.functions.invoke('classify-request', { body: { request_id: inserted.id } })
         .catch((err) => console.error('Classify failed:', err))
